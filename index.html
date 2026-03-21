@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Família Cassoma · Árvore Genealógica</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root {
+  --kente-gold:    #F2A900;
+  --kente-red:     #C0392B;
+  --kente-green:   #1A6B3C;
+  --kente-blue:    #1B4F8A;
+  --chitenge-plum: #6B2D6B;
+  --wax-orange:    #E05C1A;
+  --wax-teal:      #0D7377;
+  --ink:           #0E0A04;
+  --deep:          #1A0F04;
+  --creme:         #FBF3E2;
+  --pale:          #F5E6C8;
+  --mid:           #2C1A08;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:var(--deep);}
+::-webkit-scrollbar-thumb{background:var(--kente-gold);}
+
+body{background:var(--ink);color:var(--creme);font-family:'Lora',serif;overflow-x:hidden;}
+
+.kente-band{height:14px;background:repeating-linear-gradient(90deg,var(--kente-gold) 0,var(--kente-gold) 20px,var(--kente-red) 20px,var(--kente-red) 40px,var(--kente-green) 40px,var(--kente-green) 60px,var(--kente-blue) 60px,var(--kente-blue) 80px,var(--chitenge-plum) 80px,var(--chitenge-plum) 100px,var(--wax-orange) 100px,var(--wax-orange) 120px);}
+.kente-band-thin{height:6px;background:repeating-linear-gradient(90deg,var(--kente-gold) 0,var(--kente-gold) 12px,var(--kente-red) 12px,var(--kente-red) 24px,var(--kente-green) 24px,var(--kente-green) 36px,var(--kente-blue) 36px,var(--kente-blue) 48px,var(--chitenge-plum) 48px,var(--chitenge-plum) 60px,var(--wax-orange) 60px,var(--wax-orange) 72px);}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 2rem;overflow:hidden;}
+.hero-geo{position:absolute;inset:0;opacity:.07;background-image:repeating-linear-gradient(0deg,transparent 0,transparent 28px,rgba(242,169,0,.8) 29px),repeating-linear-gradient(90deg,transparent 0,transparent 28px,rgba(192,57,43,.8) 29px),repeating-linear-gradient(45deg,transparent 0,transparent 14px,rgba(26,107,60,.6) 15px),repeating-linear-gradient(-45deg,transparent 0,transparent 14px,rgba(27,79,138,.6) 15px);background-size:30px 30px;}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(242,169,0,.18) 0%,transparent 55%),radial-gradient(ellipse at 75% 60%,rgba(192,57,43,.14) 0%,transparent 50%),radial-gradient(ellipse at 50% 10%,rgba(26,107,60,.12) 0%,transparent 45%),linear-gradient(175deg,#1A0F04 0%,#0E0A04 100%);}
+.corner{position:absolute;width:120px;height:120px;opacity:.18;}
+.corner svg{width:100%;height:100%;}
+.corner-tl{top:20px;left:20px;}
+.corner-tr{top:20px;right:20px;transform:scaleX(-1);}
+.corner-bl{bottom:20px;left:20px;transform:scaleY(-1);}
+.corner-br{bottom:20px;right:20px;transform:scale(-1,-1);}
+.hero-content{position:relative;z-index:2;}
+.eyebrow{font-family:'Bebas Neue',sans-serif;letter-spacing:.55em;font-size:.75rem;color:var(--kente-gold);margin-bottom:1.2rem;opacity:0;animation:riseIn 1s .3s forwards;}
+.hero-title{font-family:'Cinzel Decorative',serif;font-size:clamp(3rem,9vw,7.5rem);font-weight:900;line-height:1;letter-spacing:.04em;background:linear-gradient(135deg,var(--kente-gold) 0%,var(--wax-orange) 40%,var(--kente-gold) 70%,#FFF0C0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 40px rgba(242,169,0,.35));opacity:0;animation:riseIn 1.1s .5s forwards;}
+.hero-sub{font-family:'Lora',serif;font-style:italic;font-size:clamp(1rem,2.5vw,1.3rem);color:var(--pale);margin-top:.8rem;letter-spacing:.08em;opacity:0;animation:riseIn 1s .8s forwards;}
+.stripe-divider{display:flex;align-items:center;width:260px;height:8px;margin:2rem auto;border-radius:2px;overflow:hidden;opacity:0;animation:fadeIn 1s 1s forwards;}
+.stripe-divider span{flex:1;height:100%;}
+.hero-desc{max-width:500px;font-size:1.05rem;line-height:1.9;color:var(--pale);opacity:0;animation:riseIn 1s 1.1s forwards;}
+.badge-angola{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;border:1px solid rgba(242,169,0,.4);padding:.4rem 1.2rem;font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.78rem;color:var(--kente-gold);background:rgba(242,169,0,.07);opacity:0;animation:fadeIn 1s 1.3s forwards;}
+.scroll-hint{margin-top:2.5rem;font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.72rem;color:var(--wax-orange);cursor:pointer;opacity:0;animation:fadeIn 1.5s 1.6s forwards,floatY 2.2s 2.2s ease-in-out infinite;}
+
+/* TREE SECTION */
+.tree-section{padding:5rem 1.5rem 6rem;position:relative;}
+.tree-section::before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:repeating-linear-gradient(180deg,var(--kente-gold) 0,var(--kente-gold) 16px,var(--kente-red) 16px,var(--kente-red) 32px,var(--kente-green) 32px,var(--kente-green) 48px,var(--kente-blue) 48px,var(--kente-blue) 64px);}
+.tree-section::after{content:'';position:absolute;right:0;top:0;bottom:0;width:6px;background:repeating-linear-gradient(180deg,var(--chitenge-plum) 0,var(--chitenge-plum) 16px,var(--wax-orange) 16px,var(--wax-orange) 32px,var(--wax-teal) 32px,var(--wax-teal) 48px,var(--kente-gold) 48px,var(--kente-gold) 64px);}
+.sec-header{text-align:center;margin-bottom:4rem;}
+.sec-eyebrow{font-family:'Bebas Neue',sans-serif;letter-spacing:.45em;font-size:.72rem;color:var(--wax-orange);margin-bottom:.6rem;}
+.sec-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.4rem,4vw,2.8rem);color:var(--creme);line-height:1.2;}
+.sec-title em{font-style:italic;color:var(--kente-gold);}
+.stats-bar{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;margin-top:2rem;}
+.stat{text-align:center;}
+.stat-num{font-family:'Cinzel Decorative',serif;font-size:2rem;color:var(--kente-gold);line-height:1;}
+.stat-label{font-size:.72rem;font-family:'Bebas Neue',sans-serif;letter-spacing:.25em;color:var(--pale);opacity:.6;margin-top:.2rem;}
+.tree-canvas{max-width:1300px;margin:0 auto;position:relative;min-height:200px;}
+.empty-tree-msg{text-align:center;padding:4rem 2rem;border:2px dashed rgba(242,169,0,.2);margin:0 auto;max-width:600px;}
+.empty-icon{font-size:4rem;margin-bottom:1rem;opacity:.4;}
+.empty-title{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--kente-gold);margin-bottom:.8rem;}
+.empty-desc{font-size:.95rem;color:var(--pale);opacity:.6;line-height:1.7;font-style:italic;}
+
+/* GENERATION ROWS */
+.gen-row{display:flex;flex-direction:column;margin-bottom:0;}
+.gen-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding:0 1rem;}
+.gen-badge{font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.68rem;padding:.3rem .9rem;border-radius:1px;white-space:nowrap;}
+.gen-line{flex:1;height:1px;}
+.gen-add-btn{background:none;font-family:'Bebas Neue',sans-serif;letter-spacing:.2em;font-size:.65rem;padding:.3rem .8rem;cursor:pointer;transition:all .25s;white-space:nowrap;}
+.gen-add-btn:hover{background:rgba(242,169,0,.1);}
+.gen-members{display:flex;flex-wrap:wrap;gap:1.2rem;padding:0 1rem 2.5rem;min-height:60px;align-items:flex-start;justify-content:center;}
+.gen-members.empty-gen{border:1px dashed rgba(242,169,0,.1);justify-content:center;align-items:center;min-height:100px;border-radius:2px;}
+.empty-gen-hint{font-style:italic;font-size:.85rem;color:var(--pale);opacity:.3;}
+
+/* PERSON CARD */
+.person-card{display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:transform .3s,filter .3s;position:relative;width:110px;}
+.person-card:hover{transform:translateY(-8px);filter:brightness(1.15);}
+.avatar-ring{width:76px;height:76px;border-radius:50%;padding:3px;background:conic-gradient(var(--kente-gold) 0deg 60deg,var(--kente-red) 60deg 120deg,var(--kente-green) 120deg 180deg,var(--kente-blue) 180deg 240deg,var(--chitenge-plum) 240deg 300deg,var(--wax-orange) 300deg 360deg);position:relative;transition:box-shadow .3s;}
+.person-card:hover .avatar-ring{box-shadow:0 0 24px rgba(242,169,0,.5);}
+.avatar-ring.patriarch{width:96px;height:96px;}
+.avatar-ring.deceased::after{content:'';position:absolute;inset:3px;border-radius:50%;background:rgba(14,10,4,.45);pointer-events:none;}
+.avatar-inner{width:100%;height:100%;border-radius:50%;background:var(--mid);display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden;}
+.avatar-ring.patriarch .avatar-inner{font-size:2.5rem;}
+.person-name{font-family:'Lora',serif;font-size:.78rem;font-weight:600;color:var(--creme);margin-top:.55rem;text-align:center;max-width:108px;line-height:1.3;}
+.person-dates{font-size:.66rem;color:var(--pale);opacity:.55;margin-top:.15rem;font-style:italic;text-align:center;}
+.person-gen-tag{font-family:'Bebas Neue',sans-serif;letter-spacing:.12em;font-size:.6rem;margin-top:.2rem;text-align:center;}
+.deceased-badge{position:absolute;top:-4px;right:-2px;width:18px;height:18px;background:var(--deep);border:1px solid rgba(192,57,43,.6);border-radius:50%;font-size:.6rem;display:flex;align-items:center;justify-content:center;color:#C0392B;}
+
+/* BOTTOM ADD */
+.bottom-add{max-width:680px;margin:0 auto;text-align:center;padding:4rem 2rem;position:relative;}
+.bottom-add::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--kente-gold),transparent);}
+.add-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.2rem,3.5vw,1.8rem);color:var(--creme);margin-bottom:.8rem;}
+.add-desc{font-size:1rem;line-height:1.8;color:var(--pale);opacity:.75;margin-bottom:2rem;font-style:italic;}
+.btn-primary{display:inline-flex;align-items:center;background:none;border:none;cursor:pointer;padding:0;}
+.btn-primary-inner{background:linear-gradient(135deg,var(--kente-gold),var(--wax-orange));color:var(--ink);font-family:'Bebas Neue',sans-serif;letter-spacing:.35em;font-size:.82rem;padding:.95rem 2.5rem;transition:filter .3s,transform .3s;}
+.btn-primary:hover .btn-primary-inner{filter:brightness(1.1);transform:translateY(-2px);}
+
+/* OVERLAYS */
+.overlay{position:fixed;inset:0;background:rgba(14,10,4,.88);z-index:200;display:none;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(8px);}
+.overlay.open{display:flex;}
+.modal{background:var(--mid);border:1px solid rgba(242,169,0,.25);width:100%;max-width:480px;position:relative;animation:popIn .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 30px 80px rgba(0,0,0,.7);overflow:hidden;}
+.modal-kente-top{height:8px;background:repeating-linear-gradient(90deg,var(--kente-gold) 0,var(--kente-gold) 16px,var(--kente-red) 16px,var(--kente-red) 32px,var(--kente-green) 32px,var(--kente-green) 48px,var(--kente-blue) 48px,var(--kente-blue) 64px,var(--chitenge-plum) 64px,var(--chitenge-plum) 80px,var(--wax-orange) 80px,var(--wax-orange) 96px);}
+.modal-body{padding:2.5rem;}
+.modal-close{position:absolute;top:.8rem;right:1rem;background:none;border:none;color:var(--pale);font-size:1.4rem;cursor:pointer;line-height:1;transition:color .2s;z-index:10;}
+.modal-close:hover{color:var(--kente-gold);}
+.modal-avatar-wrap{display:flex;justify-content:center;margin-bottom:1.5rem;}
+.modal-avatar-ring{width:90px;height:90px;border-radius:50%;padding:3px;background:conic-gradient(var(--kente-gold) 0deg 60deg,var(--kente-red) 60deg 120deg,var(--kente-green) 120deg 180deg,var(--kente-blue) 180deg 240deg,var(--chitenge-plum) 240deg 300deg,var(--wax-orange) 300deg 360deg);box-shadow:0 0 30px rgba(242,169,0,.3);}
+.modal-avatar-inner{width:100%;height:100%;border-radius:50%;background:var(--deep);display:flex;align-items:center;justify-content:center;font-size:2.8rem;}
+.modal-name{font-family:'Cinzel Decorative',serif;font-size:1.4rem;text-align:center;color:var(--creme);line-height:1.3;margin-bottom:.3rem;}
+.modal-role-badge{display:flex;justify-content:center;margin-bottom:1.5rem;}
+.modal-role-badge span{background:linear-gradient(135deg,var(--kente-gold),var(--wax-orange));color:var(--ink);font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.68rem;padding:.25rem 1rem;}
+.modal-sep{height:1px;background:linear-gradient(90deg,transparent,rgba(242,169,0,.4),transparent);margin-bottom:1.5rem;}
+.modal-fields{display:flex;flex-direction:column;gap:.75rem;}
+.modal-field{display:grid;grid-template-columns:90px 1fr;gap:.5rem;font-size:.92rem;line-height:1.5;}
+.field-label{font-family:'Bebas Neue',sans-serif;letter-spacing:.15em;font-size:.67rem;color:var(--wax-orange);padding-top:.1rem;}
+.field-val{color:var(--pale);font-style:italic;}
+.modal-note{margin-top:1.2rem;padding:1rem 1.2rem;border-left:3px solid var(--kente-gold);background:rgba(242,169,0,.05);font-size:.9rem;line-height:1.75;color:var(--pale);font-style:italic;}
+.modal-actions{display:flex;gap:.7rem;margin-top:1.5rem;}
+.btn-edit,.btn-delete{flex:1;padding:.65rem;font-family:'Bebas Neue',sans-serif;letter-spacing:.25em;font-size:.7rem;cursor:pointer;border:none;transition:filter .25s;}
+.btn-edit{background:rgba(242,169,0,.15);color:var(--kente-gold);border:1px solid rgba(242,169,0,.3);}
+.btn-delete{background:rgba(192,57,43,.15);color:#e74c3c;border:1px solid rgba(192,57,43,.3);}
+.btn-edit:hover,.btn-delete:hover{filter:brightness(1.3);}
+
+/* FORM */
+.form-modal{max-width:540px;max-height:92vh;overflow-y:auto;}
+.form-title{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--creme);margin-bottom:2rem;}
+.form-group{margin-bottom:1.1rem;}
+.form-label{display:block;font-family:'Bebas Neue',sans-serif;letter-spacing:.2em;font-size:.67rem;color:var(--wax-orange);margin-bottom:.35rem;}
+.form-input,.form-select,.form-textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(242,169,0,.2);color:var(--creme);padding:.65rem .9rem;font-family:'Lora',serif;font-size:.95rem;outline:none;transition:border-color .25s,background .25s;border-radius:1px;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--kente-gold);background:rgba(242,169,0,.06);}
+.form-select option{background:var(--mid);}
+.form-textarea{resize:vertical;min-height:75px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+.emoji-grid{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.4rem;}
+.emoji-btn{width:42px;height:42px;background:rgba(255,255,255,.04);border:1px solid rgba(242,169,0,.15);font-size:1.4rem;cursor:pointer;border-radius:2px;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.emoji-btn:hover,.emoji-btn.selected{border-color:var(--kente-gold);background:rgba(242,169,0,.12);transform:scale(1.15);}
+.btn-submit{width:100%;margin-top:1.2rem;background:linear-gradient(135deg,var(--kente-gold),var(--wax-orange));color:var(--ink);font-family:'Bebas Neue',sans-serif;letter-spacing:.35em;font-size:.85rem;padding:.95rem;border:none;cursor:pointer;transition:filter .3s,transform .3s;}
+.btn-submit:hover{filter:brightness(1.1);transform:translateY(-2px);}
+
+/* PHOTO UPLOAD */
+.photo-upload-area{border:2px dashed rgba(242,169,0,0.3);border-radius:4px;padding:1.2rem;text-align:center;cursor:pointer;transition:all .25s;position:relative;background:rgba(255,255,255,.02);}
+.photo-upload-area:hover{border-color:var(--kente-gold);background:rgba(242,169,0,.05);}
+.photo-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.photo-preview-wrap{position:relative;display:inline-block;margin-bottom:.6rem;}
+.photo-preview{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--kente-gold);display:block;}
+.photo-remove{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:var(--kente-red);border:none;color:#fff;font-size:.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+.photo-placeholder{font-size:2.5rem;margin-bottom:.4rem;opacity:.4;}
+.photo-upload-hint{font-family:'Bebas Neue',sans-serif;letter-spacing:.2em;font-size:.65rem;color:var(--kente-gold);opacity:.7;}
+.photo-upload-sub{font-size:.72rem;color:var(--pale);opacity:.4;margin-top:.2rem;font-style:italic;}
+
+/* PHONE in modal */
+.phone-link{color:var(--kente-gold);text-decoration:none;font-style:italic;}
+.phone-link:hover{text-decoration:underline;}
+
+/* Card photo */
+.avatar-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+
+/* Modal big photo */
+.modal-photo-big{width:90px;height:90px;border-radius:50%;object-fit:cover;}
+
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;padding:.9rem 1.5rem;font-family:'Bebas Neue',sans-serif;letter-spacing:.2em;font-size:.75rem;z-index:999;animation:riseIn .4s ease,sinkOut .5s 2.6s forwards;box-shadow:0 6px 24px rgba(0,0,0,.5);border-left:4px solid var(--kente-gold);background:var(--mid);color:var(--creme);max-width:300px;}
+
+footer{text-align:center;padding:2.5rem 2rem;font-size:.82rem;color:var(--pale);opacity:.45;font-style:italic;border-top:1px solid rgba(242,169,0,.08);}
+
+@keyframes riseIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+@keyframes popIn{from{opacity:0;transform:scale(.93) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes sinkOut{to{opacity:0;transform:translateY(10px)}}
+
+@media(max-width:640px){.form-row{grid-template-columns:1fr;}.stats-bar{gap:1.5rem;}.gen-members{gap:.9rem;}.person-card{width:90px;}.avatar-ring{width:62px;height:62px;}}
+</style>
+</head>
+<body>
+
+<div class="kente-band"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-geo"></div>
+  <div class="hero-glow"></div>
+  <div class="corner corner-tl"><svg viewBox="0 0 120 120" fill="none"><polygon points="60,5 115,55 60,105 5,55" stroke="#F2A900" stroke-width="1.5" fill="none" opacity=".6"/><polygon points="60,20 100,55 60,90 20,55" stroke="#C0392B" stroke-width="1" fill="none" opacity=".5"/><polygon points="60,35 85,55 60,75 35,55" stroke="#1A6B3C" stroke-width="1" fill="none" opacity=".4"/><line x1="5" y1="55" x2="115" y2="55" stroke="#F2A900" stroke-width=".8" opacity=".4"/><line x1="60" y1="5" x2="60" y2="105" stroke="#F2A900" stroke-width=".8" opacity=".4"/></svg></div>
+  <div class="corner corner-tr"><svg viewBox="0 0 120 120" fill="none"><polygon points="60,5 115,55 60,105 5,55" stroke="#F2A900" stroke-width="1.5" fill="none" opacity=".6"/><polygon points="60,20 100,55 60,90 20,55" stroke="#1B4F8A" stroke-width="1" fill="none" opacity=".5"/><polygon points="60,35 85,55 60,75 35,55" stroke="#6B2D6B" stroke-width="1" fill="none" opacity=".4"/></svg></div>
+  <div class="corner corner-bl"><svg viewBox="0 0 120 120" fill="none"><polygon points="60,5 115,55 60,105 5,55" stroke="#F2A900" stroke-width="1.5" fill="none" opacity=".6"/><polygon points="60,20 100,55 60,90 20,55" stroke="#E05C1A" stroke-width="1" fill="none" opacity=".5"/></svg></div>
+  <div class="corner corner-br"><svg viewBox="0 0 120 120" fill="none"><polygon points="60,5 115,55 60,105 5,55" stroke="#F2A900" stroke-width="1.5" fill="none" opacity=".6"/><polygon points="60,20 100,55 60,90 20,55" stroke="#0D7377" stroke-width="1" fill="none" opacity=".5"/></svg></div>
+
+  <div class="hero-content">
+    <p class="eyebrow">Árvore Genealógica · Família</p>
+    <h1 class="hero-title">CASSOMA</h1>
+    <p class="hero-sub">Raízes de Malange · Angola · África</p>
+    <div class="stripe-divider">
+      <span style="background:var(--kente-gold)"></span>
+      <span style="background:var(--kente-red)"></span>
+      <span style="background:var(--kente-green)"></span>
+      <span style="background:var(--kente-blue)"></span>
+      <span style="background:var(--chitenge-plum)"></span>
+      <span style="background:var(--wax-orange)"></span>
+      <span style="background:var(--wax-teal)"></span>
+      <span style="background:var(--kente-gold)"></span>
+    </div>
+    <p class="hero-desc">Uma família é uma árvore cujas raízes sustentam cada ramo. Preserve a memória, as histórias e os laços da família Cassoma, originária das terras de Malange, Angola.</p>
+    <span class="badge-angola">📍 Malange · Angola</span>
+    <div class="scroll-hint" onclick="document.getElementById('arvore').scrollIntoView({behavior:'smooth'})">↓ &nbsp; Construir a Árvore</div>
+  </div>
+</section>
+
+<div class="kente-band-thin"></div>
+
+<!-- TREE -->
+<section class="tree-section" id="arvore">
+  <div class="sec-header">
+    <p class="sec-eyebrow">Genealogia · Família Cassoma · Malange</p>
+    <h2 class="sec-title">A <em>Árvore</em> da Família</h2>
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-num" id="totalCount">0</div><div class="stat-label">Membros</div></div>
+      <div class="stat"><div class="stat-num" id="genCount">0</div><div class="stat-label">Gerações</div></div>
+      <div class="stat"><div class="stat-num" id="aliveCount">0</div><div class="stat-label">Vivos</div></div>
+    </div>
+  </div>
+  <div class="tree-canvas" id="treeCanvas"></div>
+</section>
+
+<div class="kente-band-thin"></div>
+
+<div class="bottom-add">
+  <h3 class="add-title">Adicionar à Árvore</h3>
+  <p class="add-desc">Cada nome que adicionares é uma folha que não cai.<br>Regista os membros da família Cassoma e preserva a sua história para as gerações futuras.</p>
+  <button class="btn-primary" onclick="openAddForm()"><div class="btn-primary-inner">+ ADICIONAR MEMBRO DA FAMÍLIA</div></button>
+</div>
+
+<div class="kente-band"></div>
+
+<footer>Família Cassoma · Malange, Angola · <em>Preservando raízes, honrando memórias</em></footer>
+
+<!-- VIEW MODAL -->
+<div class="overlay" id="viewOverlay" onclick="closeViewOvl(event)">
+  <div class="modal">
+    <div class="modal-kente-top"></div>
+    <button class="modal-close" onclick="cancelDelete();document.getElementById('viewOverlay').classList.remove('open')">✕</button>
+    <div class="modal-body">
+      <div class="modal-avatar-wrap"><div class="modal-avatar-ring" id="vAvatarRing"><div class="modal-avatar-inner" id="vEmoji">👤</div></div></div>
+      <h2 class="modal-name" id="vName"></h2>
+      <div class="modal-role-badge"><span id="vRole"></span></div>
+      <div class="modal-sep"></div>
+      <div class="modal-fields" id="vFields"></div>
+      <div class="modal-note" id="vNote" style="display:none"></div>
+      <div class="modal-actions">
+        <button class="btn-edit" onclick="editFromView()">✏ EDITAR</button>
+        <button class="btn-delete" id="btnDeleteMain" onclick="showDeleteConfirm()">✕ REMOVER</button>
+      </div>
+      <!-- Inline delete confirmation -->
+      <div id="deleteConfirmBox" style="display:none;margin-top:1rem;padding:1rem;border:1px solid rgba(192,57,43,0.4);background:rgba(192,57,43,0.08);">
+        <p style="font-size:.88rem;color:var(--pale);margin-bottom:.8rem;text-align:center;font-style:italic;">Tem a certeza que deseja remover <strong id="deleteConfirmName" style="color:var(--creme);font-style:normal;"></strong> da árvore?</p>
+        <div style="display:flex;gap:.6rem;">
+          <button onclick="confirmDelete()" style="flex:1;padding:.6rem;background:var(--kente-red);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;letter-spacing:.2em;font-size:.72rem;cursor:pointer;">SIM, REMOVER</button>
+          <button onclick="cancelDelete()" style="flex:1;padding:.6rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:var(--pale);font-family:'Bebas Neue',sans-serif;letter-spacing:.2em;font-size:.72rem;cursor:pointer;">CANCELAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM MODAL -->
+<div class="overlay" id="formOverlay" onclick="closeFormOvl(event)">
+  <div class="modal form-modal">
+    <div class="modal-kente-top"></div>
+    <button class="modal-close" onclick="document.getElementById('formOverlay').classList.remove('open')">✕</button>
+    <div class="modal-body">
+      <h3 class="form-title" id="formTitle">Adicionar Membro</h3>
+      <input type="hidden" id="fEditId" value="">
+
+      <div class="form-group">
+        <label class="form-label">Ícone / Avatar</label>
+        <div class="emoji-grid" id="emojiGrid"></div>
+        <input type="hidden" id="fEmoji" value="👤">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Nome Completo *</label>
+        <input class="form-input" id="fName" placeholder="Ex: Eduardo Cassoma" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Geração</label>
+        <select class="form-select" id="fGen">
+          <option value="1">Geração I — Fundadores / Ancestrais</option>
+          <option value="2">Geração II — Filhos</option>
+          <option value="3">Geração III — Netos</option>
+          <option value="4">Geração IV — Bisnetos</option>
+          <option value="5">Geração V — Trinetos</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Papel na Família</label>
+        <input class="form-input" id="fRole" placeholder="Ex: Patriarca, Filho, Esposa, Neto..." />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Ano de Nascimento</label>
+          <input class="form-input" id="fBorn" placeholder="Ex: 1950" type="number" min="1800" max="2025" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ano de Falecimento</label>
+          <input class="form-input" id="fDied" placeholder="Vazio se vivo" type="number" min="1800" max="2025" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Local de Nascimento</label>
+        <input class="form-input" id="fPlace" placeholder="Ex: Malange, Angola" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Número de Telefone</label>
+        <input class="form-input" id="fPhone" placeholder="Ex: +244 923 456 789" type="tel" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Fotografia</label>
+        <div class="photo-upload-area" id="photoUploadArea" onclick="document.getElementById('fPhotoFile').click()">
+          <input type="file" id="fPhotoFile" accept="image/*" style="display:none" onchange="handlePhotoUpload(event)">
+          <div id="photoPreviewContainer">
+            <div class="photo-placeholder">📷</div>
+            <div class="photo-upload-hint">CLIQUE PARA CARREGAR FOTO</div>
+            <div class="photo-upload-sub">JPG, PNG ou WEBP · máx. 4MB</div>
+          </div>
+        </div>
+        <input type="hidden" id="fPhoto" value="">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Memória / Nota</label>
+        <textarea class="form-textarea" id="fNote" placeholder="Uma história, profissão, legado especial desta pessoa..."></textarea>
+      </div>
+
+      <button class="btn-submit" onclick="submitPerson()">GUARDAR NA ÁRVORE</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const EMOJIS = ['👤','👴🏿','👵🏿','👨🏿','👩🏿','👦🏿','👧🏿','🧒🏿','👶🏿','🧑🏿','🧔🏿','🧓🏿','🫅🏿','👑','🌿','🌳','⭐','🕊️','🙏🏿','💛'];
+const GEN_CFG = {
+  '1':{label:'GERAÇÃO I',   color:'var(--kente-gold)',    bg:'rgba(242,169,0,0.12)',   border:'rgba(242,169,0,0.35)'},
+  '2':{label:'GERAÇÃO II',  color:'var(--kente-red)',     bg:'rgba(192,57,43,0.12)',   border:'rgba(192,57,43,0.35)'},
+  '3':{label:'GERAÇÃO III', color:'var(--kente-green)',   bg:'rgba(26,107,60,0.12)',   border:'rgba(26,107,60,0.35)'},
+  '4':{label:'GERAÇÃO IV',  color:'var(--kente-blue)',    bg:'rgba(27,79,138,0.12)',   border:'rgba(27,79,138,0.35)'},
+  '5':{label:'GERAÇÃO V',   color:'var(--chitenge-plum)', bg:'rgba(107,45,107,0.12)',  border:'rgba(107,45,107,0.35)'},
+};
+
+let people = JSON.parse(localStorage.getItem('cassoma_people') || '[]');
+let viewingId = null;
+
+function save(){ localStorage.setItem('cassoma_people', JSON.stringify(people)); }
+
+/* ── PHOTO UPLOAD ── */
+function handlePhotoUpload(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 4*1024*1024){ toast('Foto muito grande. Máximo 4MB.'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('fPhoto').value = ev.target.result;
+    renderPhotoPreview(ev.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderPhotoPreview(src){
+  const c = document.getElementById('photoPreviewContainer');
+  if(src){
+    c.innerHTML=`<div class="photo-preview-wrap"><img class="photo-preview" src="${src}"><button class="photo-remove" type="button" onclick="clearPhoto(event)">✕</button></div><div class="photo-upload-hint" style="margin-top:.3rem">ALTERAR FOTO</div>`;
+  } else {
+    c.innerHTML=`<div class="photo-placeholder">📷</div><div class="photo-upload-hint">CLIQUE PARA CARREGAR FOTO</div><div class="photo-upload-sub">JPG, PNG ou WEBP · máx. 4MB</div>`;
+  }
+}
+
+function clearPhoto(e){
+  e.stopPropagation();
+  document.getElementById('fPhoto').value='';
+  document.getElementById('fPhotoFile').value='';
+  renderPhotoPreview('');
+}
+
+/* ── RENDER ── */
+function render(){
+  const canvas = document.getElementById('treeCanvas');
+  canvas.innerHTML = '';
+  document.getElementById('totalCount').textContent = people.length;
+  const gens = [...new Set(people.map(p=>p.gen))];
+  document.getElementById('genCount').textContent  = gens.length;
+  document.getElementById('aliveCount').textContent = people.filter(p=>!p.died).length;
+
+  if(!people.length){
+    canvas.innerHTML=`<div class="empty-tree-msg"><div class="empty-icon">🌱</div><div class="empty-title">A árvore aguarda as suas raízes</div><div class="empty-desc">Adicione o primeiro membro da família Cassoma<br>para começar a construir a árvore genealógica.</div></div>`;
+    return;
+  }
+
+  const byGen={};
+  people.forEach(p=>{ if(!byGen[p.gen]) byGen[p.gen]=[]; byGen[p.gen].push(p); });
+  Object.keys(byGen).sort((a,b)=>+a-+b).forEach(g=>{
+    const cfg = GEN_CFG[g]||{label:`GERAÇÃO ${g}`,color:'var(--kente-gold)',bg:'rgba(242,169,0,0.1)',border:'rgba(242,169,0,0.3)'};
+    const row = document.createElement('div');
+    row.className='gen-row'; row.id=`gen-row-${g}`;
+    row.innerHTML=`
+      <div class="gen-header">
+        <span class="gen-badge" style="background:${cfg.bg};color:${cfg.color};border:1px solid ${cfg.border}">${cfg.label}</span>
+        <div class="gen-line" style="background:linear-gradient(90deg,${cfg.color}60,transparent)"></div>
+        <button class="gen-add-btn" style="color:${cfg.color};border:1px dashed ${cfg.border}" onclick="openAddFormGen(${g})">+ ADICIONAR</button>
+      </div>
+      <div class="gen-members" id="gen-members-${g}"></div>`;
+    canvas.appendChild(row);
+    const membersDiv = row.querySelector('.gen-members');
+    byGen[g].forEach(p=>membersDiv.appendChild(createCard(p)));
+  });
+}
+
+function createCard(p){
+  const card=document.createElement('div');
+  card.className='person-card';
+  card.onclick=()=>openView(p.id);
+  const isP=p.gen=='1';
+  const ringCls=`avatar-ring${isP?' patriarch':''}${p.died?' deceased':''}`;
+  const dates=p.born?(p.died?`${p.born} – ${p.died}`:`${p.born} –`):(p.died?`† ${p.died}`:'');
+  const cfg=GEN_CFG[p.gen]||{color:'var(--kente-gold)'};
+  const avatarContent = p.photo
+    ? `<img src="${p.photo}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+    : (p.emoji||'👤');
+  card.innerHTML=`
+    ${p.died?'<div class="deceased-badge">†</div>':''}
+    <div class="${ringCls}"><div class="avatar-inner">${avatarContent}</div></div>
+    <div class="person-name">${p.name}</div>
+    ${dates?`<div class="person-dates">${dates}</div>`:''}
+    ${p.role?`<div class="person-gen-tag" style="color:${cfg.color}">${p.role}</div>`:''}`;
+  return card;
+}
+
+/* ── EMOJI PICKER ── */
+function buildEmojiGrid(sel){
+  const g=document.getElementById('emojiGrid'); g.innerHTML='';
+  EMOJIS.forEach(e=>{
+    const b=document.createElement('button');
+    b.type='button'; b.className='emoji-btn'+(e===sel?' selected':'');
+    b.textContent=e;
+    b.onclick=()=>{ document.querySelectorAll('.emoji-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); document.getElementById('fEmoji').value=e; };
+    g.appendChild(b);
+  });
+}
+
+/* ── FORM ── */
+function openAddForm(){ openAddFormGen(null); }
+function openAddFormGen(gen){
+  document.getElementById('formTitle').textContent='Adicionar Membro';
+  document.getElementById('fEditId').value='';
+  ['fName','fRole','fBorn','fDied','fPlace','fNote','fPhone'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fEmoji').value='👤';
+  document.getElementById('fPhoto').value='';
+  document.getElementById('fPhotoFile').value='';
+  renderPhotoPreview('');
+  document.getElementById('fGen').value=gen||'1';
+  buildEmojiGrid('👤');
+  document.getElementById('formOverlay').classList.add('open');
+}
+function closeFormOvl(e){ if(e.target===document.getElementById('formOverlay')) document.getElementById('formOverlay').classList.remove('open'); }
+
+function submitPerson(){
+  const name=document.getElementById('fName').value.trim();
+  if(!name){ toast('Por favor insira o nome.'); return; }
+  const editId=document.getElementById('fEditId').value;
+  const person={
+    id: editId||Date.now().toString(),
+    emoji: document.getElementById('fEmoji').value||'👤',
+    name,
+    gen:   document.getElementById('fGen').value,
+    role:  document.getElementById('fRole').value.trim(),
+    born:  document.getElementById('fBorn').value,
+    died:  document.getElementById('fDied').value,
+    place: document.getElementById('fPlace').value.trim(),
+    phone: document.getElementById('fPhone').value.trim(),
+    photo: document.getElementById('fPhoto').value,
+    note:  document.getElementById('fNote').value.trim(),
+  };
+  if(editId){ const i=people.findIndex(p=>p.id===editId); if(i>-1) people[i]=person; toast(`${name} foi actualizado!`); }
+  else{ people.push(person); toast(`${name} foi adicionado à árvore!`); }
+  save(); render();
+  document.getElementById('formOverlay').classList.remove('open');
+}
+
+/* ── VIEW ── */
+function openView(id){
+  const p=people.find(x=>x.id===id); if(!p) return;
+  viewingId=id;
+
+  // Avatar — photo takes priority over emoji
+  const ring = document.getElementById('vAvatarRing');
+  const inner = document.getElementById('vEmoji');
+  if(p.photo){
+    inner.innerHTML=`<img class="modal-photo-big" src="${p.photo}" alt="${p.name}">`;
+  } else {
+    inner.innerHTML='';
+    inner.textContent=p.emoji||'👤';
+  }
+
+  document.getElementById('vName').textContent=p.name;
+  document.getElementById('vRole').textContent=p.role||(GEN_CFG[p.gen]?.label||`Geração ${p.gen}`);
+  const dates=p.born?(p.died?`${p.born} – ${p.died}`:`${p.born} – presente`):(p.died?`† ${p.died}`:'—');
+  const gl=GEN_CFG[p.gen]?.label||`Geração ${p.gen}`;
+  let fields=`<div class="modal-field"><span class="field-label">Geração</span><span class="field-val">${gl}</span></div><div class="modal-field"><span class="field-label">Datas</span><span class="field-val">${dates}</span></div>`;
+  if(p.place) fields+=`<div class="modal-field"><span class="field-label">Natural de</span><span class="field-val">${p.place}</span></div>`;
+  if(p.phone) fields+=`<div class="modal-field"><span class="field-label">Telefone</span><span class="field-val"><a class="phone-link" href="tel:${p.phone}">${p.phone}</a></span></div>`;
+  fields+=`<div class="modal-field"><span class="field-label">Família</span><span class="field-val">Cassoma · Malange, Angola</span></div>`;
+  document.getElementById('vFields').innerHTML=fields;
+  const ne=document.getElementById('vNote');
+  if(p.note){ne.style.display='block';ne.textContent=p.note;}else ne.style.display='none';
+  document.getElementById('viewOverlay').classList.add('open');
+}
+function closeViewOvl(e){
+  if(e.target===document.getElementById('viewOverlay')){
+    document.getElementById('deleteConfirmBox').style.display='none';
+    document.getElementById('btnDeleteMain').style.display='';
+    document.getElementById('viewOverlay').classList.remove('open');
+  }
+}
+
+function editFromView(){
+  const p=people.find(x=>x.id===viewingId); if(!p) return;
+  document.getElementById('viewOverlay').classList.remove('open');
+  document.getElementById('formTitle').textContent='Editar Membro';
+  document.getElementById('fEditId').value=p.id;
+  document.getElementById('fName').value=p.name;
+  document.getElementById('fGen').value=p.gen;
+  document.getElementById('fRole').value=p.role||'';
+  document.getElementById('fBorn').value=p.born||'';
+  document.getElementById('fDied').value=p.died||'';
+  document.getElementById('fPlace').value=p.place||'';
+  document.getElementById('fPhone').value=p.phone||'';
+  document.getElementById('fNote').value=p.note||'';
+  document.getElementById('fEmoji').value=p.emoji||'👤';
+  document.getElementById('fPhoto').value=p.photo||'';
+  document.getElementById('fPhotoFile').value='';
+  renderPhotoPreview(p.photo||'');
+  buildEmojiGrid(p.emoji||'👤');
+  document.getElementById('formOverlay').classList.add('open');
+}
+
+function showDeleteConfirm(){
+  const p=people.find(x=>x.id===viewingId); if(!p) return;
+  document.getElementById('deleteConfirmName').textContent=p.name;
+  document.getElementById('deleteConfirmBox').style.display='block';
+  document.getElementById('btnDeleteMain').style.display='none';
+}
+
+function cancelDelete(){
+  document.getElementById('deleteConfirmBox').style.display='none';
+  document.getElementById('btnDeleteMain').style.display='';
+}
+
+function confirmDelete(){
+  const p=people.find(x=>x.id===viewingId); if(!p) return;
+  people=people.filter(x=>x.id!==viewingId);
+  save(); render();
+  document.getElementById('viewOverlay').classList.remove('open');
+  document.getElementById('deleteConfirmBox').style.display='none';
+  document.getElementById('btnDeleteMain').style.display='';
+  toast(`${p.name} foi removido da árvore.`);
+}
+
+/* ── TOAST ── */
+function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3200); }
+
+render();
+</script>
+</body>
+</html>
