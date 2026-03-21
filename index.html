@@ -349,7 +349,33 @@ footer{text-align:center;padding:2.5rem 2rem;font-size:.82rem;color:var(--pale);
   </div>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ══════════════════════════════════════════════════════
+//  🔥 CONFIGURAÇÃO FIREBASE — siga as instruções abaixo
+//  1. Aceda a https://console.firebase.google.com
+//  2. Crie um projecto (ex: "familia-cassoma")
+//  3. Vá a Project Settings → Web app → "Add app"
+//  4. Copie o objecto firebaseConfig e cole aqui
+//  5. No Firestore Database → Rules, coloque:
+//     allow read, write: if true;
+// ══════════════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyCZ_PYPobizORpQ2JkkwKNffsU6M6VGj_c",
+  authDomain: "familia-cassoma.firebaseapp.com",
+  projectId: "familia-cassoma",
+  storageBucket: "familia-cassoma.firebasestorage.app",
+  messagingSenderId: "466726163980",
+  appId: "1:466726163980:web:0b608f8354fed6299b8029",
+  measurementId: "G-MK3EK1KH5Y"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const colRef = collection(db, "membros");
+
 const EMOJIS = ['👤','👴🏿','👵🏿','👨🏿','👩🏿','👦🏿','👧🏿','🧒🏿','👶🏿','🧑🏿','🧔🏿','🧓🏿','🫅🏿','👑','🌿','🌳','⭐','🕊️','🙏🏿','💛'];
 const GEN_CFG = {
   '1':{label:'GERAÇÃO I',   color:'var(--kente-gold)',    bg:'rgba(242,169,0,0.12)',   border:'rgba(242,169,0,0.35)'},
@@ -359,10 +385,22 @@ const GEN_CFG = {
   '5':{label:'GERAÇÃO V',   color:'var(--chitenge-plum)', bg:'rgba(107,45,107,0.12)',  border:'rgba(107,45,107,0.35)'},
 };
 
-let people = JSON.parse(localStorage.getItem('cassoma_people') || '[]');
+let people = [];
 let viewingId = null;
 
-function save(){ localStorage.setItem('cassoma_people', JSON.stringify(people)); }
+// Escuta alterações em tempo real — actualiza automaticamente para todos
+onSnapshot(colRef, snapshot => {
+  people = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  render();
+});
+
+async function save(person){
+  await setDoc(doc(db, "membros", person.id), person);
+}
+
+async function remove(id){
+  await deleteDoc(doc(db, "membros", id));
+}
 
 /* ── PHOTO UPLOAD ── */
 function handlePhotoUpload(e){
@@ -474,7 +512,7 @@ function openAddFormGen(gen){
 }
 function closeFormOvl(e){ if(e.target===document.getElementById('formOverlay')) document.getElementById('formOverlay').classList.remove('open'); }
 
-function submitPerson(){
+async function submitPerson(){
   const name=document.getElementById('fName').value.trim();
   if(!name){ toast('Por favor insira o nome.'); return; }
   const editId=document.getElementById('fEditId').value;
@@ -491,10 +529,9 @@ function submitPerson(){
     photo: document.getElementById('fPhoto').value,
     note:  document.getElementById('fNote').value.trim(),
   };
-  if(editId){ const i=people.findIndex(p=>p.id===editId); if(i>-1) people[i]=person; toast(`${name} foi actualizado!`); }
-  else{ people.push(person); toast(`${name} foi adicionado à árvore!`); }
-  save(); render();
   document.getElementById('formOverlay').classList.remove('open');
+  await save(person);
+  toast(editId ? `${name} foi actualizado!` : `${name} foi adicionado à árvore!`);
 }
 
 /* ── VIEW ── */
@@ -566,20 +603,31 @@ function cancelDelete(){
   document.getElementById('btnDeleteMain').style.display='';
 }
 
-function confirmDelete(){
+async function confirmDelete(){
   const p=people.find(x=>x.id===viewingId); if(!p) return;
-  people=people.filter(x=>x.id!==viewingId);
-  save(); render();
   document.getElementById('viewOverlay').classList.remove('open');
   document.getElementById('deleteConfirmBox').style.display='none';
   document.getElementById('btnDeleteMain').style.display='';
+  await remove(viewingId);
   toast(`${p.name} foi removido da árvore.`);
 }
 
 /* ── TOAST ── */
 function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3200); }
 
-render();
+// Expõe funções ao HTML (necessário com type="module")
+window.openAddForm = openAddForm;
+window.openAddFormGen = openAddFormGen;
+window.closeFormOvl = closeFormOvl;
+window.submitPerson = submitPerson;
+window.openView = openView;
+window.closeViewOvl = closeViewOvl;
+window.editFromView = editFromView;
+window.showDeleteConfirm = showDeleteConfirm;
+window.cancelDelete = cancelDelete;
+window.confirmDelete = confirmDelete;
+window.handlePhotoUpload = handlePhotoUpload;
+window.clearPhoto = clearPhoto;
 </script>
 </body>
 </html>
