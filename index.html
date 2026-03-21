@@ -171,6 +171,35 @@ body{background:var(--ink);color:var(--creme);font-family:'Lora',serif;overflow-
 
 footer{text-align:center;padding:2.5rem 2rem;font-size:.82rem;color:var(--pale);opacity:.45;font-style:italic;border-top:1px solid rgba(242,169,0,.08);}
 
+/* ADMIN BAR */
+.admin-bar{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:.5rem 1.5rem;background:rgba(14,10,4,.95);border-bottom:2px solid var(--kente-gold);backdrop-filter:blur(8px);}
+.admin-bar-left{display:flex;align-items:center;gap:.8rem;}
+.admin-label{font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.68rem;color:var(--kente-gold);}
+.admin-dot{width:8px;height:8px;border-radius:50%;background:var(--kente-green);box-shadow:0 0 6px var(--kente-green);}
+.btn-logout{background:none;border:1px solid rgba(242,169,0,.3);color:var(--pale);font-family:'Bebas Neue',sans-serif;letter-spacing:.2em;font-size:.62rem;padding:.3rem .8rem;cursor:pointer;transition:all .2s;}
+.btn-logout:hover{border-color:var(--kente-red);color:var(--kente-red);}
+.btn-export{display:inline-flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,var(--kente-gold),var(--wax-orange));color:var(--ink);font-family:'Bebas Neue',sans-serif;letter-spacing:.25em;font-size:.68rem;padding:.45rem 1.2rem;border:none;cursor:pointer;transition:filter .25s,transform .25s;}
+.btn-export:hover{filter:brightness(1.1);transform:translateY(-1px);}
+.btn-export-public{display:inline-flex;align-items:center;gap:.4rem;background:none;border:1px solid rgba(242,169,0,.4);color:var(--kente-gold);font-family:'Bebas Neue',sans-serif;letter-spacing:.25em;font-size:.68rem;padding:.45rem 1.2rem;cursor:pointer;transition:all .25s;margin-right:.6rem;}
+.btn-export-public:hover{background:rgba(242,169,0,.08);}
+
+/* PASSWORD MODAL */
+.pwd-modal{max-width:380px;text-align:center;}
+.pwd-title{font-family:'Cinzel Decorative',serif;font-size:1.2rem;color:var(--creme);margin-bottom:.5rem;}
+.pwd-sub{font-size:.88rem;color:var(--pale);opacity:.6;font-style:italic;margin-bottom:1.5rem;line-height:1.6;}
+.pwd-input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(242,169,0,.3);color:var(--creme);padding:.75rem 1rem;font-family:'Lora',serif;font-size:1rem;outline:none;text-align:center;letter-spacing:.2em;border-radius:1px;transition:border-color .25s;}
+.pwd-input:focus{border-color:var(--kente-gold);}
+.pwd-error{color:var(--kente-red);font-size:.8rem;font-family:'Bebas Neue',sans-serif;letter-spacing:.15em;margin-top:.6rem;min-height:1.2em;}
+.pwd-btn{width:100%;margin-top:1rem;background:linear-gradient(135deg,var(--kente-gold),var(--wax-orange));color:var(--ink);font-family:'Bebas Neue',sans-serif;letter-spacing:.35em;font-size:.82rem;padding:.9rem;border:none;cursor:pointer;transition:filter .3s;}
+.pwd-btn:hover{filter:brightness(1.1);}
+
+/* EXPORT OVERLAY */
+.export-overlay{position:fixed;inset:0;background:rgba(14,10,4,.9);z-index:400;display:none;align-items:center;justify-content:center;flex-direction:column;gap:1rem;}
+.export-overlay.open{display:flex;}
+.export-spinner{width:48px;height:48px;border:3px solid rgba(242,169,0,.2);border-top-color:var(--kente-gold);border-radius:50%;animation:spin .8s linear infinite;}
+.export-msg{font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.8rem;color:var(--kente-gold);}
+@keyframes spin{to{transform:rotate(360deg)}}
+
 @keyframes riseIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
@@ -182,7 +211,50 @@ footer{text-align:center;padding:2.5rem 2rem;font-size:.82rem;color:var(--pale);
 </head>
 <body>
 
-<div class="kente-band"></div>
+<!-- ADMIN BAR (só visível para admins) -->
+<div class="admin-bar" id="adminBar" style="display:none">
+  <div class="admin-bar-left">
+    <div class="admin-dot"></div>
+    <span class="admin-label">Modo Administrador</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:.6rem;">
+    <button class="btn-export" onclick="exportPNG()">⬇ BAIXAR ÁRVORE PNG</button>
+    <button class="btn-logout" onclick="logoutAdmin()">SAIR</button>
+  </div>
+</div>
+
+<!-- BOTÃO EXPORTAR (visível para todos) -->
+<div id="publicExportBar" style="position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:.5rem 1.5rem;background:rgba(14,10,4,.85);border-bottom:1px solid rgba(242,169,0,.15);backdrop-filter:blur(8px);">
+  <span style="font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.65rem;color:var(--pale);opacity:.5;">FAMÍLIA CASSOMA</span>
+  <div style="display:flex;gap:.6rem;align-items:center;">
+    <button class="btn-export-public" onclick="exportPNG()">⬇ BAIXAR PNG</button>
+    <button class="btn-export-public" onclick="openPwdModal()" style="border-color:rgba(242,169,0,.6);color:var(--kente-gold);">🔑 ADMIN</button>
+  </div>
+</div>
+
+<!-- MODAL SENHA -->
+<div class="overlay" id="pwdOverlay" onclick="closePwdOvl(event)">
+  <div class="modal pwd-modal">
+    <div class="modal-kente-top"></div>
+    <button class="modal-close" onclick="document.getElementById('pwdOverlay').classList.remove('open')">✕</button>
+    <div class="modal-body">
+      <div style="font-size:2.5rem;margin-bottom:1rem;">🔑</div>
+      <h3 class="pwd-title">Área de Administração</h3>
+      <p class="pwd-sub">Introduza a senha para poder adicionar,<br>editar e remover membros da família.</p>
+      <input class="pwd-input" id="pwdInput" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPassword()">
+      <div class="pwd-error" id="pwdError"></div>
+      <button class="pwd-btn" onclick="checkPassword()">ENTRAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY DE EXPORTAÇÃO -->
+<div class="export-overlay" id="exportOverlay">
+  <div class="export-spinner"></div>
+  <div class="export-msg">A GERAR IMAGEM DA ÁRVORE...</div>
+</div>
+
+<div class="kente-band" style="margin-top:44px"></div>
 
 <!-- HERO -->
 <section class="hero">
@@ -231,7 +303,7 @@ footer{text-align:center;padding:2.5rem 2rem;font-size:.82rem;color:var(--pale);
 
 <div class="kente-band-thin"></div>
 
-<div class="bottom-add">
+<div class="bottom-add" id="bottomAdd" style="display:none">
   <h3 class="add-title">Adicionar à Árvore</h3>
   <p class="add-desc">Cada nome que adicionares é uma folha que não cai.<br>Regista os membros da família Cassoma e preserva a sua história para as gerações futuras.</p>
   <button class="btn-primary" onclick="openAddForm()"><div class="btn-primary-inner">+ ADICIONAR MEMBRO DA FAMÍLIA</div></button>
@@ -253,7 +325,7 @@ footer{text-align:center;padding:2.5rem 2rem;font-size:.82rem;color:var(--pale);
       <div class="modal-sep"></div>
       <div class="modal-fields" id="vFields"></div>
       <div class="modal-note" id="vNote" style="display:none"></div>
-      <div class="modal-actions">
+      <div class="modal-actions" id="vActions" style="display:none">
         <button class="btn-edit" onclick="editFromView()">✏ EDITAR</button>
         <button class="btn-delete" id="btnDeleteMain" onclick="showDeleteConfirm()">✕ REMOVER</button>
       </div>
@@ -388,10 +460,91 @@ const GEN_CFG = {
 let people = [];
 let viewingId = null;
 
+// ══════════════════════════════════════════════════════
+//  🔑 SENHA DE ADMINISTRADOR — altere aqui a sua senha
+// ══════════════════════════════════════════════════════
+const ADMIN_PASSWORD = "cassoma2025";
+
+let isAdmin = sessionStorage.getItem('cassoma_admin') === 'true';
+
+function applyAdminUI(){
+  document.getElementById('adminBar').style.display       = isAdmin ? 'flex' : 'none';
+  document.getElementById('publicExportBar').style.display = isAdmin ? 'none' : 'flex';
+  document.getElementById('bottomAdd').style.display      = isAdmin ? 'block' : 'none';
+  const vActions = document.getElementById('vActions');
+  if(vActions) vActions.style.display = isAdmin ? 'flex' : 'none';
+  // Botões de adicionar por geração
+  document.querySelectorAll('.gen-add-btn').forEach(b => b.style.display = isAdmin ? '' : 'none');
+}
+
+function openPwdModal(){
+  document.getElementById('pwdInput').value='';
+  document.getElementById('pwdError').textContent='';
+  document.getElementById('pwdOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('pwdInput').focus(),200);
+}
+function closePwdOvl(e){ if(e.target===document.getElementById('pwdOverlay')) document.getElementById('pwdOverlay').classList.remove('open'); }
+
+function checkPassword(){
+  const val = document.getElementById('pwdInput').value;
+  if(val === ADMIN_PASSWORD){
+    isAdmin = true;
+    sessionStorage.setItem('cassoma_admin','true');
+    document.getElementById('pwdOverlay').classList.remove('open');
+    applyAdminUI();
+    toast('Bem-vindo, administrador! ✓');
+  } else {
+    document.getElementById('pwdError').textContent = 'SENHA INCORRECTA';
+    document.getElementById('pwdInput').value='';
+    document.getElementById('pwdInput').focus();
+  }
+}
+
+function logoutAdmin(){
+  isAdmin = false;
+  sessionStorage.removeItem('cassoma_admin');
+  applyAdminUI();
+  toast('Sessão de administrador encerrada.');
+}
+
+/* ── EXPORTAR PNG ── */
+async function exportPNG(){
+  const exportOverlay = document.getElementById('exportOverlay');
+  exportOverlay.classList.add('open');
+  try {
+    // Carrega html2canvas dinamicamente
+    if(!window.html2canvas){
+      await new Promise((res,rej)=>{
+        const s=document.createElement('script');
+        s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        s.onload=res; s.onerror=rej;
+        document.head.appendChild(s);
+      });
+    }
+    const section = document.getElementById('arvore');
+    const canvas = await window.html2canvas(section, {
+      backgroundColor: '#0E0A04',
+      scale: 2,
+      useCORS: true,
+      logging: false,
+    });
+    const link = document.createElement('a');
+    link.download = 'arvore-familia-cassoma.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    toast('Imagem baixada com sucesso! 🌳');
+  } catch(err){
+    toast('Erro ao gerar imagem. Tente novamente.');
+  } finally {
+    exportOverlay.classList.remove('open');
+  }
+}
+
 // Escuta alterações em tempo real — actualiza automaticamente para todos
 onSnapshot(colRef, snapshot => {
   people = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
   render();
+  applyAdminUI();
 });
 
 async function save(person){
@@ -560,6 +713,8 @@ function openView(id){
   document.getElementById('vFields').innerHTML=fields;
   const ne=document.getElementById('vNote');
   if(p.note){ne.style.display='block';ne.textContent=p.note;}else ne.style.display='none';
+  // Mostrar botões de edição só para admins
+  document.getElementById('vActions').style.display = isAdmin ? 'flex' : 'none';
   document.getElementById('viewOverlay').classList.add('open');
 }
 function closeViewOvl(e){
@@ -628,6 +783,11 @@ window.cancelDelete = cancelDelete;
 window.confirmDelete = confirmDelete;
 window.handlePhotoUpload = handlePhotoUpload;
 window.clearPhoto = clearPhoto;
+window.openPwdModal = openPwdModal;
+window.closePwdOvl = closePwdOvl;
+window.checkPassword = checkPassword;
+window.logoutAdmin = logoutAdmin;
+window.exportPNG = exportPNG;
 </script>
 </body>
 </html>
