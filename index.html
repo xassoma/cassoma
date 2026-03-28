@@ -46,7 +46,7 @@ body{background:var(--ink);color:var(--creme);font-family:'Lora',serif;overflow-
 .hero-sub{font-family:'Lora',serif;font-style:italic;font-size:clamp(1rem,2.5vw,1.3rem);color:var(--pale);margin-top:.8rem;letter-spacing:.08em;opacity:0;animation:riseIn 1s .8s forwards;}
 .stripe-divider{display:flex;align-items:center;width:260px;height:8px;margin:2rem auto;border-radius:2px;overflow:hidden;opacity:0;animation:fadeIn 1s 1s forwards;}
 .stripe-divider span{flex:1;height:100%;}
-.hero-desc{max-width:500px;font-size:1.05rem;line-height:1.9;color:var(--pale);opacity:0;animation:riseIn 1s 1.1s forwards;}
+.hero-desc{max-width:500px;font-size:1.05rem;line-height:1.9;color:var(--pale);opacity:0;animation:riseIn 1s 1.1s forwards;text-align:center;margin-left:auto;margin-right:auto;}
 .badge-angola{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;border:1px solid rgba(242,169,0,.4);padding:.4rem 1.2rem;font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.78rem;color:var(--kente-gold);background:rgba(242,169,0,.07);opacity:0;animation:fadeIn 1s 1.3s forwards;}
 .scroll-hint{margin-top:2.5rem;font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.72rem;color:var(--wax-orange);cursor:pointer;opacity:0;animation:fadeIn 1.5s 1.6s forwards,floatY 2.2s 2.2s ease-in-out infinite;}
 
@@ -345,7 +345,7 @@ footer{text-align:center;padding:2.5rem 2rem;font-size:.82rem;color:var(--pale);
       <span style="background:var(--wax-teal)"></span>
       <span style="background:var(--kente-gold)"></span>
     </div>
-    <p class="hero-desc" style="text-align:center">A família Cassoma tem raízes em três territórios que percorrem Angola de leste a oeste, do interior ao litoral — um trajecto que espelha a própria história do país. Do lado paterno, origens em Huambo e nas Lundas. Do lado materno, Luanda, onde o Atlântico termina a viagem do interior.</p>
+    <p class="hero-desc">A família Cassoma tem raízes em três territórios que percorrem Angola de leste a oeste, do interior ao litoral — um trajecto que espelha a própria história do país. Do lado paterno, origens em Huambo e nas Lundas. Do lado materno, Luanda, onde o Atlântico termina a viagem do interior.</p>
     <span class="badge-angola">📍 Angola · Luanda · Huambo · Lundas</span>
     <div style="margin-top:1.8rem;display:flex;flex-direction:column;gap:.5rem;align-items:center;opacity:0;animation:riseIn 1s 1.5s forwards;">
       <span style="font-family:'Cinzel Decorative',serif;font-size:.9rem;color:var(--kente-gold);font-style:italic;">Oku Soma, Oku Hanya · Hondeka Kubakala</span>
@@ -841,7 +841,7 @@ function render(){
   // SVG overlay para as linhas de linhagem
   const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
   svg.id = 'lineageSvg';
-  svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;pointer-events:none;z-index:1;overflow:visible;';
+  svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:visible;';
   canvas.style.position = 'relative';
   canvas.appendChild(svg);
 
@@ -864,32 +864,58 @@ function render(){
     byGen[g].forEach(p=>membersDiv.appendChild(createCard(p)));
   });
 
-  // Desenha linhas depois do layout estar pronto
-  requestAnimationFrame(()=>requestAnimationFrame(()=>drawLines(svg)));
+  // Aguarda dois frames para o browser fazer layout completo antes de medir posições
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    drawLines(svg);
+  }));
 }
 
-function getCoords(el, canvasRect){
+/* ── LINHAS DE LINHAGEM ── */
+function getCoords(el, svgRect){
   const r = el.getBoundingClientRect();
+  // Coordenadas relativas ao canto superior esquerdo do SVG element
   return {
-    cx: r.left + r.width/2  - canvasRect.left,
-    top: r.top              - canvasRect.top,
-    bottom: r.bottom        - canvasRect.top,
+    cx:     r.left + r.width  / 2 - svgRect.left,
+    top:    r.top                  - svgRect.top,
+    bottom: r.bottom               - svgRect.top,
   };
 }
 
 function drawLines(svg){
-  svg.innerHTML='';
+  svg.innerHTML = '';
   const hasPairs = people.some(p=>p.parentId) || people.some(p=>p.spouseId);
   if(!hasPairs) return;
 
+  // Usa o próprio SVG como origem — elimina qualquer problema de scroll ou transforms
+  const svgRect = svg.getBoundingClientRect();
+
+  // Garante que o SVG cobre toda a altura do canvas
   const canvasEl = svg.parentElement;
-  const canvasRect = canvasEl.getBoundingClientRect();
+  svg.setAttribute('height', canvasEl.scrollHeight);
+  svg.setAttribute('width',  canvasEl.scrollWidth);
 
   const lineColors = {
     '1':'#F2A900','2':'#C0392B','3':'#1A6B3C','4':'#1B4F8A','5':'#6B2D6B'
   };
 
-  // Agrupa filhos por pai
+  const mkLine = (x1,y1,x2,y2,color,dash='5,4') => {
+    const l = document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',Math.round(x1)); l.setAttribute('y1',Math.round(y1));
+    l.setAttribute('x2',Math.round(x2)); l.setAttribute('y2',Math.round(y2));
+    l.setAttribute('stroke',color);
+    l.setAttribute('stroke-width','1.5');
+    l.setAttribute('stroke-opacity','0.6');
+    l.setAttribute('stroke-dasharray',dash);
+    svg.appendChild(l);
+  };
+  const mkDot = (cx,cy,r,color,op='.7') => {
+    const d = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    d.setAttribute('cx',Math.round(cx)); d.setAttribute('cy',Math.round(cy));
+    d.setAttribute('r',r); d.setAttribute('fill',color); d.setAttribute('opacity',op);
+    svg.appendChild(d);
+  };
+
+  // ── LINHAS PAI → FILHOS ──
   const childrenByParent = {};
   people.forEach(child => {
     if(!child.parentId) return;
@@ -904,63 +930,41 @@ function drawLines(svg){
     const parentEl = document.querySelector(`[data-id="${parent.id}"] .avatar-ring`);
     if(!parentEl) return;
 
-    const pCoords = getCoords(parentEl, canvasRect);
+    // Re-obtém svgRect no momento do cálculo (por se o DOM tiver reflow)
+    const sr = svg.getBoundingClientRect();
+    const pC = getCoords(parentEl, sr);
     const color = lineColors[parent.gen] || '#F2A900';
 
-    // Posições de todos os filhos
     const childCoords = children.map(child => {
       const el = document.querySelector(`[data-id="${child.id}"] .avatar-ring`);
       if(!el) return null;
-      return getCoords(el, canvasRect);
+      return getCoords(el, sr);
     }).filter(Boolean);
 
     if(!childCoords.length) return;
 
-    // Ponto de junção: desce do centro do pai, para a meio caminho entre pai e filhos
-    const childTopY = Math.min(...childCoords.map(c => c.top));
-    const junctionY = pCoords.bottom + (childTopY - pCoords.bottom) * 0.5;
+    const childTopY  = Math.min(...childCoords.map(c => c.top));
+    const junctionY  = pC.bottom + (childTopY - pC.bottom) * 0.5;
 
-    const mkLine = (x1,y1,x2,y2) => {
-      const l = document.createElementNS('http://www.w3.org/2000/svg','line');
-      l.setAttribute('x1',x1); l.setAttribute('y1',y1);
-      l.setAttribute('x2',x2); l.setAttribute('y2',y2);
-      l.setAttribute('stroke',color);
-      l.setAttribute('stroke-width','1.5');
-      l.setAttribute('stroke-opacity','0.55');
-      l.setAttribute('stroke-dasharray','5,4');
-      svg.appendChild(l);
-    };
-    const mkDot = (cx,cy,r,op) => {
-      const d = document.createElementNS('http://www.w3.org/2000/svg','circle');
-      d.setAttribute('cx',cx); d.setAttribute('cy',cy);
-      d.setAttribute('r',r); d.setAttribute('fill',color); d.setAttribute('opacity',op);
-      svg.appendChild(d);
-    };
-
-    // Linha vertical do pai até junção
-    mkLine(pCoords.cx, pCoords.bottom, pCoords.cx, junctionY);
-    mkDot(pCoords.cx, pCoords.bottom, 3, '.7');
+    // Vertical do pai até junção
+    mkLine(pC.cx, pC.bottom, pC.cx, junctionY, color);
+    mkDot(pC.cx, pC.bottom, 3, color);
 
     if(childCoords.length > 1){
-      // Linha horizontal no nível da junção, entre o filho mais à esquerda e mais à direita
       const minCx = Math.min(...childCoords.map(c => c.cx));
       const maxCx = Math.max(...childCoords.map(c => c.cx));
-      mkLine(minCx, junctionY, maxCx, junctionY);
+      mkLine(minCx, junctionY, maxCx, junctionY, color);
     }
 
-    // Linha vertical de cada ponto na horizontal até ao topo do avatar do filho
     childCoords.forEach(cc => {
-      mkLine(cc.cx, junctionY, cc.cx, cc.top);
-      mkDot(cc.cx, cc.top, 3, '.7');
+      mkLine(cc.cx, junctionY, cc.cx, cc.top, color);
+      mkDot(cc.cx, cc.top, 3, color);
     });
 
-    // Ponto de junção no centro do pai
-    mkDot(pCoords.cx, junctionY, 2.5, '.5');
+    mkDot(pC.cx, junctionY, 2.5, color, '.5');
   });
 
-  svg.setAttribute('height', canvasEl.scrollHeight);
-
-  // Linhas de casal — horizontal com coração no meio
+  // ── LINHAS DE CASAL ──
   const drawnCouples = new Set();
   people.forEach(p => {
     if(!p.spouseId) return;
@@ -975,37 +979,28 @@ function drawLines(svg){
     const elB = document.querySelector(`[data-id="${spouse.id}"] .avatar-ring`);
     if(!elA || !elB) return;
 
-    const cA = getCoords(elA, canvasRect);
-    const cB = getCoords(elB, canvasRect);
-    const midY = (cA.bottom + cA.top) / 2;
-    const midX = (cA.cx + cB.cx) / 2;
+    const sr = svg.getBoundingClientRect();
+    const cA = getCoords(elA, sr);
+    const cB = getCoords(elB, sr);
+    const midY  = (cA.top + cA.bottom) / 2;
+    const midX  = (cA.cx + cB.cx) / 2;
     const leftX  = Math.min(cA.cx, cB.cx);
     const rightX = Math.max(cA.cx, cB.cx);
 
-    // Linha horizontal a tracejado entre os dois
-    const cl = document.createElementNS('http://www.w3.org/2000/svg','line');
-    cl.setAttribute('x1', leftX); cl.setAttribute('y1', midY);
-    cl.setAttribute('x2', rightX); cl.setAttribute('y2', midY);
-    cl.setAttribute('stroke','#C45C2E');
-    cl.setAttribute('stroke-width','1.5');
-    cl.setAttribute('stroke-opacity','0.5');
-    cl.setAttribute('stroke-dasharray','3,3');
-    svg.appendChild(cl);
+    mkLine(leftX, midY, rightX, midY, '#C45C2E', '3,3');
 
-    // Coração SVG no meio
+    // Coração no meio
     const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.setAttribute('transform', `translate(${midX},${midY})`);
-    // Fundo branco para não sobrepor a linha
+    g.setAttribute('transform', `translate(${Math.round(midX)},${Math.round(midY)})`);
     const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
     bg.setAttribute('x','-8'); bg.setAttribute('y','-8');
     bg.setAttribute('width','16'); bg.setAttribute('height','16');
     bg.setAttribute('fill','#0E0A04');
     g.appendChild(bg);
-    // Coração via path
     const heart = document.createElementNS('http://www.w3.org/2000/svg','path');
     heart.setAttribute('d','M0,3 C0,3 -6,-3 -6,-6 C-6,-9 -3,-10 0,-7 C3,-10 6,-9 6,-6 C6,-3 0,3 0,3 Z');
     heart.setAttribute('fill','#C45C2E');
-    heart.setAttribute('opacity','0.75');
+    heart.setAttribute('opacity','0.8');
     g.appendChild(heart);
     svg.appendChild(g);
   });
@@ -1254,11 +1249,6 @@ window.addEventListener('resize', ()=>{
   const svg = document.getElementById('lineageSvg');
   if(svg) drawLines(svg);
 });
-
-window.addEventListener('scroll', ()=>{
-  const svg = document.getElementById('lineageSvg');
-  if(svg) drawLines(svg);
-}, {passive: true});
 window.closeViewOvl = closeViewOvl;
 window.editFromView = editFromView;
 window.showDeleteConfirm = showDeleteConfirm;
