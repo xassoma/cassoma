@@ -574,6 +574,13 @@ footer{text-align:center;padding:2.5rem 2rem;font-size:.82rem;color:var(--pale);
       </div>
 
       <div class="form-group">
+        <label class="form-label">Cônjuge / Parceiro(a)</label>
+        <select class="form-select" id="fSpouse">
+          <option value="">— Sem cônjuge —</option>
+        </select>
+      </div>
+
+      <div class="form-group">
         <label class="form-label">Papel na Família</label>
         <input class="form-input" id="fRole" placeholder="Ex: Patriarca, Filho, Esposa, Neto..." />
       </div>
@@ -861,11 +868,22 @@ function render(){
   requestAnimationFrame(()=>requestAnimationFrame(()=>drawLines(svg)));
 }
 
+function getCoords(el, canvasRect){
+  const r = el.getBoundingClientRect();
+  return {
+    cx: r.left + r.width/2  - canvasRect.left,
+    top: r.top              - canvasRect.top,
+    bottom: r.bottom        - canvasRect.top,
+  };
+}
+
 function drawLines(svg){
   svg.innerHTML='';
-  const canvasRect = svg.parentElement.getBoundingClientRect();
-  const hasPairs = people.some(p=>p.parentId);
+  const hasPairs = people.some(p=>p.parentId) || people.some(p=>p.spouseId);
   if(!hasPairs) return;
+
+  const canvasEl = svg.parentElement;
+  const canvasRect = canvasEl.getBoundingClientRect();
 
   const lineColors = {
     '1':'#F2A900','2':'#C0392B','3':'#1A6B3C','4':'#1B4F8A','5':'#6B2D6B'
@@ -886,87 +904,111 @@ function drawLines(svg){
     const parentEl = document.querySelector(`[data-id="${parent.id}"] .avatar-ring`);
     if(!parentEl) return;
 
-    const pR = parentEl.getBoundingClientRect();
-    const px = pR.left + pR.width / 2 - canvasRect.left;
-    const py = pR.top + pR.height - canvasRect.top;
-
+    const pCoords = getCoords(parentEl, canvasRect);
     const color = lineColors[parent.gen] || '#F2A900';
 
-    // Recolhe posições de todos os filhos
-    const childPositions = children.map(child => {
+    // Posições de todos os filhos
+    const childCoords = children.map(child => {
       const el = document.querySelector(`[data-id="${child.id}"] .avatar-ring`);
       if(!el) return null;
-      const r = el.getBoundingClientRect();
-      return {
-        cx: r.left + r.width / 2 - canvasRect.left,
-        cy: r.top - canvasRect.top,
-        child
-      };
+      return getCoords(el, canvasRect);
     }).filter(Boolean);
 
-    if(!childPositions.length) return;
+    if(!childCoords.length) return;
 
-    // Ponto de junção: desce verticalmente do pai até meio caminho
-    const firstChildY = Math.min(...childPositions.map(c => c.cy));
-    const junctionY = py + (firstChildY - py) * 0.45;
+    // Ponto de junção: desce do centro do pai, para a meio caminho entre pai e filhos
+    const childTopY = Math.min(...childCoords.map(c => c.top));
+    const junctionY = pCoords.bottom + (childTopY - pCoords.bottom) * 0.5;
 
-    // Linha vertical do pai até o ponto de junção
-    const vLine = document.createElementNS('http://www.w3.org/2000/svg','line');
-    vLine.setAttribute('x1', px); vLine.setAttribute('y1', py);
-    vLine.setAttribute('x2', px); vLine.setAttribute('y2', junctionY);
-    vLine.setAttribute('stroke', color);
-    vLine.setAttribute('stroke-width','1.5');
-    vLine.setAttribute('stroke-opacity','0.5');
-    vLine.setAttribute('stroke-dasharray','5,4');
-    svg.appendChild(vLine);
+    const mkLine = (x1,y1,x2,y2) => {
+      const l = document.createElementNS('http://www.w3.org/2000/svg','line');
+      l.setAttribute('x1',x1); l.setAttribute('y1',y1);
+      l.setAttribute('x2',x2); l.setAttribute('y2',y2);
+      l.setAttribute('stroke',color);
+      l.setAttribute('stroke-width','1.5');
+      l.setAttribute('stroke-opacity','0.55');
+      l.setAttribute('stroke-dasharray','5,4');
+      svg.appendChild(l);
+    };
+    const mkDot = (cx,cy,r,op) => {
+      const d = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      d.setAttribute('cx',cx); d.setAttribute('cy',cy);
+      d.setAttribute('r',r); d.setAttribute('fill',color); d.setAttribute('opacity',op);
+      svg.appendChild(d);
+    };
 
-    if(childPositions.length > 1){
-      // Linha horizontal conectando todos os filhos no nível da junção
-      const minX = Math.min(...childPositions.map(c => c.cx));
-      const maxX = Math.max(...childPositions.map(c => c.cx));
-      const hLine = document.createElementNS('http://www.w3.org/2000/svg','line');
-      hLine.setAttribute('x1', minX); hLine.setAttribute('y1', junctionY);
-      hLine.setAttribute('x2', maxX); hLine.setAttribute('y2', junctionY);
-      hLine.setAttribute('stroke', color);
-      hLine.setAttribute('stroke-width','1.5');
-      hLine.setAttribute('stroke-opacity','0.5');
-      hLine.setAttribute('stroke-dasharray','5,4');
-      svg.appendChild(hLine);
+    // Linha vertical do pai até junção
+    mkLine(pCoords.cx, pCoords.bottom, pCoords.cx, junctionY);
+    mkDot(pCoords.cx, pCoords.bottom, 3, '.7');
+
+    if(childCoords.length > 1){
+      // Linha horizontal no nível da junção, entre o filho mais à esquerda e mais à direita
+      const minCx = Math.min(...childCoords.map(c => c.cx));
+      const maxCx = Math.max(...childCoords.map(c => c.cx));
+      mkLine(minCx, junctionY, maxCx, junctionY);
     }
 
-    // Linha vertical de cada filho desde o nível da junção até ao avatar
-    childPositions.forEach(({ cx, cy }) => {
-      const cLine = document.createElementNS('http://www.w3.org/2000/svg','line');
-      cLine.setAttribute('x1', cx); cLine.setAttribute('y1', junctionY);
-      cLine.setAttribute('x2', cx); cLine.setAttribute('y2', cy);
-      cLine.setAttribute('stroke', color);
-      cLine.setAttribute('stroke-width','1.5');
-      cLine.setAttribute('stroke-opacity','0.5');
-      cLine.setAttribute('stroke-dasharray','5,4');
-      svg.appendChild(cLine);
-
-      // Ponto no filho
-      const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
-      dot.setAttribute('cx', cx); dot.setAttribute('cy', cy);
-      dot.setAttribute('r','3'); dot.setAttribute('fill', color); dot.setAttribute('opacity','.7');
-      svg.appendChild(dot);
+    // Linha vertical de cada ponto na horizontal até ao topo do avatar do filho
+    childCoords.forEach(cc => {
+      mkLine(cc.cx, junctionY, cc.cx, cc.top);
+      mkDot(cc.cx, cc.top, 3, '.7');
     });
 
-    // Ponto no pai
-    const dotP = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    dotP.setAttribute('cx', px); dotP.setAttribute('cy', py);
-    dotP.setAttribute('r','3'); dotP.setAttribute('fill', color); dotP.setAttribute('opacity','.7');
-    svg.appendChild(dotP);
-
-    // Ponto de junção central
-    const dotJ = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    dotJ.setAttribute('cx', px); dotJ.setAttribute('cy', junctionY);
-    dotJ.setAttribute('r','2.5'); dotJ.setAttribute('fill', color); dotJ.setAttribute('opacity','.5');
-    svg.appendChild(dotJ);
+    // Ponto de junção no centro do pai
+    mkDot(pCoords.cx, junctionY, 2.5, '.5');
   });
 
-  const totalH = svg.parentElement.scrollHeight;
-  svg.setAttribute('height', totalH);
+  svg.setAttribute('height', canvasEl.scrollHeight);
+
+  // Linhas de casal — horizontal com coração no meio
+  const drawnCouples = new Set();
+  people.forEach(p => {
+    if(!p.spouseId) return;
+    const key = [p.id, p.spouseId].sort().join('|');
+    if(drawnCouples.has(key)) return;
+    drawnCouples.add(key);
+
+    const spouse = people.find(x=>x.id===p.spouseId);
+    if(!spouse) return;
+
+    const elA = document.querySelector(`[data-id="${p.id}"] .avatar-ring`);
+    const elB = document.querySelector(`[data-id="${spouse.id}"] .avatar-ring`);
+    if(!elA || !elB) return;
+
+    const cA = getCoords(elA, canvasRect);
+    const cB = getCoords(elB, canvasRect);
+    const midY = (cA.bottom + cA.top) / 2;
+    const midX = (cA.cx + cB.cx) / 2;
+    const leftX  = Math.min(cA.cx, cB.cx);
+    const rightX = Math.max(cA.cx, cB.cx);
+
+    // Linha horizontal a tracejado entre os dois
+    const cl = document.createElementNS('http://www.w3.org/2000/svg','line');
+    cl.setAttribute('x1', leftX); cl.setAttribute('y1', midY);
+    cl.setAttribute('x2', rightX); cl.setAttribute('y2', midY);
+    cl.setAttribute('stroke','#C45C2E');
+    cl.setAttribute('stroke-width','1.5');
+    cl.setAttribute('stroke-opacity','0.5');
+    cl.setAttribute('stroke-dasharray','3,3');
+    svg.appendChild(cl);
+
+    // Coração SVG no meio
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('transform', `translate(${midX},${midY})`);
+    // Fundo branco para não sobrepor a linha
+    const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bg.setAttribute('x','-8'); bg.setAttribute('y','-8');
+    bg.setAttribute('width','16'); bg.setAttribute('height','16');
+    bg.setAttribute('fill','#0E0A04');
+    g.appendChild(bg);
+    // Coração via path
+    const heart = document.createElementNS('http://www.w3.org/2000/svg','path');
+    heart.setAttribute('d','M0,3 C0,3 -6,-3 -6,-6 C-6,-9 -3,-10 0,-7 C3,-10 6,-9 6,-6 C6,-3 0,3 0,3 Z');
+    heart.setAttribute('fill','#C45C2E');
+    heart.setAttribute('opacity','0.75');
+    g.appendChild(heart);
+    svg.appendChild(g);
+  });
 }
 
 function createCard(p){
@@ -1012,10 +1054,12 @@ function openAddFormGen(gen){
   document.getElementById('fPhoto').value='';
   document.getElementById('fPhotoFile').value='';
   document.getElementById('fParent').value='';
+  document.getElementById('fSpouse').value='';
   renderPhotoPreview('');
   document.getElementById('fGen').value=gen||'1';
   buildEmojiGrid('👤');
   updateParentOptions();
+  updateSpouseOptions();
   document.getElementById('formOverlay').classList.add('open');
 }
 function closeFormOvl(e){ if(e.target===document.getElementById('formOverlay')) document.getElementById('formOverlay').classList.remove('open'); }
@@ -1025,7 +1069,6 @@ function updateParentOptions(selectedId){
   const sel = document.getElementById('fParent');
   const prev = selectedId || sel.value;
   sel.innerHTML = '<option value="">— Sem ligação —</option>';
-  // Pai deve ser da geração anterior
   const parentGen = genVal - 1;
   if(parentGen < 1){ sel.innerHTML='<option value="">— Geração I não tem ascendente —</option>'; return; }
   const candidates = people.filter(p=>parseInt(p.gen)===parentGen);
@@ -1038,16 +1081,35 @@ function updateParentOptions(selectedId){
   });
 }
 
+function updateSpouseOptions(selectedId){
+  const genVal = parseInt(document.getElementById('fGen').value)||1;
+  const editId = document.getElementById('fEditId').value;
+  const sel = document.getElementById('fSpouse');
+  const prev = selectedId || sel.value;
+  sel.innerHTML = '<option value="">— Sem cônjuge —</option>';
+  // Cônjuge pode ser da mesma geração ou adjacente
+  const candidates = people.filter(p => Math.abs(parseInt(p.gen) - genVal) <= 1 && p.id !== editId);
+  candidates.forEach(p=>{
+    const opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.name + (p.role ? ` · ${p.role}` : '') + ` (Ger. ${p.gen})`;
+    if(p.id === prev) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
 async function submitPerson(){
   const name=document.getElementById('fName').value.trim();
   if(!name){ toast('Por favor insira o nome.'); return; }
   const editId=document.getElementById('fEditId').value;
+  const newSpouseId = document.getElementById('fSpouse').value || '';
   const person={
     id: editId||Date.now().toString(),
     emoji: document.getElementById('fEmoji').value||'👤',
     name,
     gen:      document.getElementById('fGen').value,
     parentId: document.getElementById('fParent').value || '',
+    spouseId: newSpouseId,
     role:     document.getElementById('fRole').value.trim(),
     born:     document.getElementById('fBorn').value,
     died:     document.getElementById('fDied').value,
@@ -1058,6 +1120,21 @@ async function submitPerson(){
   };
   document.getElementById('formOverlay').classList.remove('open');
   await save(person);
+  // Garante que o cônjuge também aponta de volta (ligação bidirecional)
+  if(newSpouseId){
+    const spouse = people.find(p=>p.id===newSpouseId);
+    if(spouse && spouse.spouseId !== person.id){
+      await save({...spouse, spouseId: person.id});
+    }
+  }
+  // Se havia cônjuge anterior e mudou, remove ligação do antigo
+  if(editId){
+    const old = people.find(p=>p.id===editId);
+    if(old && old.spouseId && old.spouseId !== newSpouseId){
+      const oldSpouse = people.find(p=>p.id===old.spouseId);
+      if(oldSpouse) await save({...oldSpouse, spouseId:''});
+    }
+  }
   toast(editId ? `${name} foi actualizado!` : `${name} foi adicionado à árvore!`);
 }
 
@@ -1083,10 +1160,22 @@ function openView(id){
   let fields=`<div class="modal-field"><span class="field-label">Geração</span><span class="field-val">${gl}</span></div><div class="modal-field"><span class="field-label">Datas</span><span class="field-val">${dates}</span></div>`;
   if(p.place) fields+=`<div class="modal-field"><span class="field-label">Natural de</span><span class="field-val">${p.place}</span></div>`;
   if(p.phone) fields+=`<div class="modal-field"><span class="field-label">Telefone</span><span class="field-val"><a class="phone-link" href="tel:${p.phone}">${p.phone}</a></span></div>`;
-  // Mostrar pai se existir
+  // Cônjuge
+  if(p.spouseId){
+    const sp = people.find(x=>x.id===p.spouseId);
+    if(sp) fields+=`<div class="modal-field"><span class="field-label">Cônjuge</span><span class="field-val" style="cursor:pointer;text-decoration:underline dotted;color:var(--kente-gold)" onclick="document.getElementById('viewOverlay').classList.remove('open');setTimeout(()=>openView('${sp.id}'),120)">${sp.name}</span></div>`;
+  }
+  // Pai/mãe
   if(p.parentId){
     const par = people.find(x=>x.id===p.parentId);
     if(par) fields+=`<div class="modal-field"><span class="field-label">Filho(a) de</span><span class="field-val">${par.name}</span></div>`;
+  }
+  // Filhos
+  const children = people.filter(x=>x.parentId===p.id);
+  const spouseChildren = p.spouseId ? people.filter(x=>x.parentId===p.spouseId && children.every(c=>c.id!==x.id)) : [];
+  const allChildren = [...children, ...spouseChildren];
+  if(allChildren.length){
+    fields+=`<div class="modal-field"><span class="field-label">Filhos</span><span class="field-val">${allChildren.map(c=>c.name).join(', ')}</span></div>`;
   }
   fields+=`<div class="modal-field"><span class="field-label">Família</span><span class="field-val">Cassoma · Angola</span></div>`;
   document.getElementById('vFields').innerHTML=fields;
@@ -1123,6 +1212,7 @@ function editFromView(){
   renderPhotoPreview(p.photo||'');
   buildEmojiGrid(p.emoji||'👤');
   updateParentOptions(p.parentId||'');
+  updateSpouseOptions(p.spouseId||'');
   document.getElementById('formOverlay').classList.add('open');
 }
 
@@ -1156,6 +1246,7 @@ window.openAddFormGen = openAddFormGen;
 window.closeFormOvl = closeFormOvl;
 window.submitPerson = submitPerson;
 window.updateParentOptions = updateParentOptions;
+window.updateSpouseOptions = updateSpouseOptions;
 window.openView = openView;
 
 // Redesenha linhas ao redimensionar janela
@@ -1163,6 +1254,11 @@ window.addEventListener('resize', ()=>{
   const svg = document.getElementById('lineageSvg');
   if(svg) drawLines(svg);
 });
+
+window.addEventListener('scroll', ()=>{
+  const svg = document.getElementById('lineageSvg');
+  if(svg) drawLines(svg);
+}, {passive: true});
 window.closeViewOvl = closeViewOvl;
 window.editFromView = editFromView;
 window.showDeleteConfirm = showDeleteConfirm;
