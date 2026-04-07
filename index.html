@@ -8,7 +8,1373 @@
 <style>
 :root {
   --kente-gold:    #F2A900;
+  --kente-red:     #C0392B;<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Família Cassoma · Árvore Genealógica</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root {
+  --kente-gold:    #F2A900;
   --kente-red:     #C0392B;
+  --kente-green:   #1A6B3C;
+  --kente-blue:    #1B4F8A;
+  --chitenge-plum: #6B2D6B;
+  --wax-orange:    #E05C1A;
+  --wax-teal:      #0D7377;
+  --ink:           #0E0A04;
+  --deep:          #1A0F04;
+  --creme:         #FBF3E2;
+  --pale:          #F5E6C8;
+  --mid:           #2C1A08;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:var(--deep);}
+::-webkit-scrollbar-thumb{background:var(--kente-gold);}
+
+body{background:var(--ink);color:var(--creme);font-family:'Lora',serif;overflow-x:hidden;}
+
+.kente-band{height:14px;background:repeating-linear-gradient(90deg,var(--kente-gold) 0,var(--kente-gold) 20px,var(--kente-red) 20px,var(--kente-red) 40px,var(--kente-green) 40px,var(--kente-green) 60px,var(--kente-blue) 60px,var(--kente-blue) 80px,var(--chitenge-plum) 80px,var(--chitenge-plum) 100px,var(--wax-orange) 100px,var(--wax-orange) 120px);}
+.kente-band-thin{height:6px;background:repeating-linear-gradient(90deg,var(--kente-gold) 0,var(--kente-gold) 12px,var(--kente-red) 12px,var(--kente-red) 24px,var(--kente-green) 24px,var(--kente-green) 36px,var(--kente-blue) 36px,var(--kente-blue) 48px,var(--chitenge-plum) 48px,var(--chitenge-plum) 60px,var(--wax-orange) 60px,var(--wax-orange) 72px);}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 2rem;overflow:hidden;}
+.hero-geo{position:absolute;inset:0;opacity:.07;background-image:repeating-linear-gradient(0deg,transparent 0,transparent 28px,rgba(242,169,0,.8) 29px),repeating-linear-gradient(90deg,transparent 0,transparent 28px,rgba(192,57,43,.8) 29px),repeating-linear-gradient(45deg,transparent 0,transparent 14px,rgba(26,107,60,.6) 15px),repeating-linear-gradient(-45deg,transparent 0,transparent 14px,rgba(27,79,138,.6) 15px);background-size:30px 30px;}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(242,169,0,.18) 0%,transparent 55%),radial-gradient(ellipse at 75% 60%,rgba(192,57,43,.14) 0%,transparent 50%),radial-gradient(ellipse at 50% 10%,rgba(26,107,60,.12) 0%,transparent 45%),linear-gradient(175deg,#1A0F04 0%,#0E0A04 100%);}
+.corner{position:absolute;width:120px;height:120px;opacity:.18;}
+.corner svg{width:100%;height:100%;}
+.corner-tl{top:20px;left:20px;}
+.corner-tr{top:20px;right:20px;transform:scaleX(-1);}
+.corner-bl{bottom:20px;left:20px;transform:scaleY(-1);}
+.corner-br{bottom:20px;right:20px;transform:scale(-1,-1);}
+.hero-content{position:relative;z-index:2;}
+.eyebrow{font-family:'Bebas Neue',sans-serif;letter-spacing:.55em;font-size:.75rem;color:var(--kente-gold);margin-bottom:1.2rem;opacity:0;animation:riseIn 1s .3s forwards;}
+.hero-title{font-family:'Cinzel Decorative',serif;font-size:clamp(3rem,9vw,7.5rem);font-weight:900;line-height:1;letter-spacing:.04em;background:linear-gradient(135deg,var(--kente-gold) 0%,var(--wax-orange) 40%,var(--kente-gold) 70%,#FFF0C0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 40px rgba(242,169,0,.35));opacity:0;animation:riseIn 1.1s .5s forwards;}
+.hero-sub{font-family:'Lora',serif;font-style:italic;font-size:clamp(1rem,2.5vw,1.3rem);color:var(--pale);margin-top:.8rem;letter-spacing:.08em;opacity:0;animation:riseIn 1s .8s forwards;}
+.stripe-divider{display:flex;align-items:center;width:260px;height:8px;margin:2rem auto;border-radius:2px;overflow:hidden;opacity:0;animation:fadeIn 1s 1s forwards;}
+.stripe-divider span{flex:1;height:100%;}
+.hero-desc{max-width:500px;font-size:1.05rem;line-height:1.9;color:var(--pale);opacity:0;animation:riseIn 1s 1.1s forwards;text-align:center;margin-left:auto;margin-right:auto;}
+.badge-angola{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;border:1px solid rgba(242,169,0,.4);padding:.4rem 1.2rem;font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.78rem;color:var(--kente-gold);background:rgba(242,169,0,.07);opacity:0;animation:fadeIn 1s 1.3s forwards;}
+.scroll-hint{margin-top:2.5rem;font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.72rem;color:var(--wax-orange);cursor:pointer;opacity:0;animation:fadeIn 1.5s 1.6s forwards,floatY 2.2s 2.2s ease-in-out infinite;}
+
+/* TREE SECTION */
+.tree-section{padding:5rem 1.5rem 6rem;position:relative;}
+.tree-section::before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:repeating-linear-gradient(180deg,var(--kente-gold) 0,var(--kente-gold) 16px,var(--kente-red) 16px,var(--kente-red) 32px,var(--kente-green) 32px,var(--kente-green) 48px,var(--kente-blue) 48px,var(--kente-blue) 64px);}
+.tree-section::after{content:'';position:absolute;right:0;top:0;bottom:0;width:6px;background:repeating-linear-gradient(180deg,var(--chitenge-plum) 0,var(--chitenge-plum) 16px,var(--wax-orange) 16px,var(--wax-orange) 32px,var(--wax-teal) 32px,var(--wax-teal) 48px,var(--kente-gold) 48px,var(--kente-gold) 64px);}
+.sec-header{text-align:center;margin-bottom:4rem;}
+.sec-eyebrow{font-family:'Bebas Neue',sans-serif;letter-spacing:.45em;font-size:.72rem;color:var(--wax-orange);margin-bottom:.6rem;}
+.sec-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.4rem,4vw,2.8rem);color:var(--creme);line-height:1.2;}
+.sec-title em{font-style:italic;color:var(--kente-gold);}
+.stats-bar{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;margin-top:2rem;}
+.stat{text-align:center;}
+.stat-num{font-family:'Cinzel Decorative',serif;font-size:2rem;color:var(--kente-gold);line-height:1;}
+.stat-label{font-size:.72rem;font-family:'Bebas Neue',sans-serif;letter-spacing:.25em;color:var(--pale);opacity:.6;margin-top:.2rem;}
+.tree-canvas{max-width:1300px;margin:0 auto;position:relative;min-height:200px;}
+.empty-tree-msg{text-align:center;padding:4rem 2rem;border:2px dashed rgba(242,169,0,.2);margin:0 auto;max-width:600px;}
+.empty-icon{font-size:4rem;margin-bottom:1rem;opacity:.4;}
+.empty-title{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--kente-gold);margin-bottom:.8rem;}
+.empty-desc{font-size:.95rem;color:var(--pale);opacity:.6;line-height:1.7;font-style:italic;}
+
+/* GENERATION ROWS */
+.gen-row{display:flex;flex-direction:column;margin-bottom:0;}
+.gen-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding:0 1rem;}
+.gen-badge{font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.68rem;padding:.3rem .9rem;border-radius:1px;white-space:nowrap;}
+.gen-line{flex:1;height:1px;}
+.gen-add-btn{background:none;font-family:'Bebas Neue',sans-serif;letter-spacing:.2em;font-size:.65rem;padding:.3rem .8rem;cursor:pointer;transition:all .25s;white-space:nowrap;}
+.gen-add-btn:hover{background:rgba(242,169,0,.1);}
+.gen-members{display:flex;flex-wrap:wrap;gap:1.2rem;padding:0 1rem 2.5rem;min-height:60px;align-items:flex-start;justify-content:center;}
+.gen-members.empty-gen{border:1px dashed rgba(242,169,0,.1);justify-content:center;align-items:center;min-height:100px;border-radius:2px;}
+.empty-gen-hint{font-style:italic;font-size:.85rem;color:var(--pale);opacity:.3;}
+
+/* PERSON CARD */
+.person-card{display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:transform .3s,filter .3s;position:relative;width:110px;}
+.person-card:hover{transform:translateY(-8px);filter:brightness(1.15);}
+.avatar-ring{width:76px;height:76px;border-radius:50%;padding:3px;background:conic-gradient(var(--kente-gold) 0deg 60deg,var(--kente-red) 60deg 120deg,var(--kente-green) 120deg 180deg,var(--kente-blue) 180deg 240deg,var(--chitenge-plum) 240deg 300deg,var(--wax-orange) 300deg 360deg);position:relative;transition:box-shadow .3s;}
+.person-card:hover .avatar-ring{box-shadow:0 0 24px rgba(242,169,0,.5);}
+.avatar-ring.patriarch{width:96px;height:96px;}
+.avatar-ring.deceased::after{content:'';position:absolute;inset:3px;border-radius:50%;background:rgba(14,10,4,.45);pointer-events:none;}
+.avatar-inner{width:100%;height:100%;border-radius:50%;background:var(--mid);display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden;}
+.avatar-ring.patriarch .avatar-inner{font-size:2.5rem;}
+.person-name{font-family:'Lora',serif;font-size:.78rem;font-weight:600;color:var(--creme);margin-top:.55rem;text-align:center;max-width:108px;line-height:1.3;}
+.person-dates{font-size:.66rem;color:var(--pale);opacity:.55;margin-top:.15rem;font-style:italic;text-align:center;}
+.person-gen-tag{font-family:'Bebas Neue',sans-serif;letter-spacing:.12em;font-size:.6rem;margin-top:.2rem;text-align:center;}
+.deceased-badge{position:absolute;top:-4px;right:-2px;width:18px;height:18px;background:var(--deep);border:1px solid rgba(192,57,43,.6);border-radius:50%;font-size:.6rem;display:flex;align-items:center;justify-content:center;color:#C0392B;}
+
+/* BOTTOM ADD */
+.bottom-add{max-width:680px;margin:0 auto;text-align:center;padding:4rem 2rem;position:relative;}
+.bottom-add::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--kente-gold),transparent);}
+.add-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.2rem,3.5vw,1.8rem);color:var(--creme);margin-bottom:.8rem;}
+.add-desc{font-size:1rem;line-height:1.8;color:var(--pale);opacity:.75;margin-bottom:2rem;font-style:italic;}
+.btn-primary{display:inline-flex;align-items:center;background:none;border:none;cursor:pointer;padding:0;}
+.btn-primary-inner{background:linear-gradient(135deg,var(--kente-gold),var(--wax-orange));color:var(--ink);font-family:'Bebas Neue',sans-serif;letter-spacing:.35em;font-size:.82rem;padding:.95rem 2.5rem;transition:filter .3s,transform .3s;}
+.btn-primary:hover .btn-primary-inner{filter:brightness(1.1);transform:translateY(-2px);}
+
+/* OVERLAYS */
+.overlay{position:fixed;inset:0;background:rgba(14,10,4,.88);z-index:200;display:none;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(8px);}
+.overlay.open{display:flex;}
+.modal{background:var(--mid);border:1px solid rgba(242,169,0,.25);width:100%;max-width:480px;position:relative;animation:popIn .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 30px 80px rgba(0,0,0,.7);overflow:hidden;}
+.modal-kente-top{height:8px;background:repeating-linear-gradient(90deg,var(--kente-gold) 0,var(--kente-gold) 16px,var(--kente-red) 16px,var(--kente-red) 32px,var(--kente-green) 32px,var(--kente-green) 48px,var(--kente-blue) 48px,var(--kente-blue) 64px,var(--chitenge-plum) 64px,var(--chitenge-plum) 80px,var(--wax-orange) 80px,var(--wax-orange) 96px);}
+.modal-body{padding:2.5rem;}
+.modal-close{position:absolute;top:.8rem;right:1rem;background:none;border:none;color:var(--pale);font-size:1.4rem;cursor:pointer;line-height:1;transition:color .2s;z-index:10;}
+.modal-close:hover{color:var(--kente-gold);}
+.modal-avatar-wrap{display:flex;justify-content:center;margin-bottom:1.5rem;}
+.modal-avatar-ring{width:90px;height:90px;border-radius:50%;padding:3px;background:conic-gradient(var(--kente-gold) 0deg 60deg,var(--kente-red) 60deg 120deg,var(--kente-green) 120deg 180deg,var(--kente-blue) 180deg 240deg,var(--chitenge-plum) 240deg 300deg,var(--wax-orange) 300deg 360deg);box-shadow:0 0 30px rgba(242,169,0,.3);}
+.modal-avatar-inner{width:100%;height:100%;border-radius:50%;background:var(--deep);display:flex;align-items:center;justify-content:center;font-size:2.8rem;}
+.modal-name{font-family:'Cinzel Decorative',serif;font-size:1.4rem;text-align:center;color:var(--creme);line-height:1.3;margin-bottom:.3rem;}
+.modal-role-badge{display:flex;justify-content:center;margin-bottom:1.5rem;}
+.modal-role-badge span{background:linear-gradient(135deg,var(--kente-gold),var(--wax-orange));color:var(--ink);font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.68rem;padding:.25rem 1rem;}
+.modal-sep{height:1px;background:linear-gradient(90deg,transparent,rgba(242,169,0,.4),transparent);margin-bottom:1.5rem;}
+.modal-fields{display:flex;flex-direction:column;gap:.75rem;}
+.modal-field{display:grid;grid-template-columns:90px 1fr;gap:.5rem;font-size:.92rem;line-height:1.5;}
+.field-label{font-family:'Bebas Neue',sans-serif;letter-spacing:.15em;font-size:.67rem;color:var(--wax-orange);padding-top:.1rem;}
+.field-val{color:var(--pale);font-style:italic;}
+.modal-note{margin-top:1.2rem;padding:1rem 1.2rem;border-left:3px solid var(--kente-gold);background:rgba(242,169,0,.05);font-size:.9rem;line-height:1.75;color:var(--pale);font-style:italic;}
+.modal-actions{display:flex;gap:.7rem;margin-top:1.5rem;}
+.btn-edit,.btn-delete{flex:1;padding:.65rem;font-family:'Bebas Neue',sans-serif;letter-spacing:.25em;font-size:.7rem;cursor:pointer;border:none;transition:filter .25s;}
+.btn-edit{background:rgba(242,169,0,.15);color:var(--kente-gold);border:1px solid rgba(242,169,0,.3);}
+.btn-delete{background:rgba(192,57,43,.15);color:#e74c3c;border:1px solid rgba(192,57,43,.3);}
+.btn-edit:hover,.btn-delete:hover{filter:brightness(1.3);}
+
+/* FORM */
+.form-modal{max-width:540px;max-height:92vh;overflow-y:auto;}
+.form-title{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--creme);margin-bottom:2rem;}
+.form-group{margin-bottom:1.1rem;}
+.form-label{display:block;font-family:'Bebas Neue',sans-serif;letter-spacing:.2em;font-size:.67rem;color:var(--wax-orange);margin-bottom:.35rem;}
+.form-input,.form-select,.form-textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(242,169,0,.2);color:var(--creme);padding:.65rem .9rem;font-family:'Lora',serif;font-size:.95rem;outline:none;transition:border-color .25s,background .25s;border-radius:1px;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--kente-gold);background:rgba(242,169,0,.06);}
+.form-select option{background:var(--mid);}
+.form-textarea{resize:vertical;min-height:75px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+.emoji-grid{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.4rem;}
+.emoji-btn{width:42px;height:42px;background:rgba(255,255,255,.04);border:1px solid rgba(242,169,0,.15);font-size:1.4rem;cursor:pointer;border-radius:2px;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.emoji-btn:hover,.emoji-btn.selected{border-color:var(--kente-gold);background:rgba(242,169,0,.12);transform:scale(1.15);}
+.btn-submit{width:100%;margin-top:1.2rem;background:linear-gradient(135deg,var(--kente-gold),var(--wax-orange));color:var(--ink);font-family:'Bebas Neue',sans-serif;letter-spacing:.35em;font-size:.85rem;padding:.95rem;border:none;cursor:pointer;transition:filter .3s,transform .3s;}
+.btn-submit:hover{filter:brightness(1.1);transform:translateY(-2px);}
+
+/* PHOTO UPLOAD */
+.photo-upload-area{border:2px dashed rgba(242,169,0,0.3);border-radius:4px;padding:1.2rem;text-align:center;cursor:pointer;transition:all .25s;position:relative;background:rgba(255,255,255,.02);}
+.photo-upload-area:hover{border-color:var(--kente-gold);background:rgba(242,169,0,.05);}
+.photo-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.photo-preview-wrap{position:relative;display:inline-block;margin-bottom:.6rem;}
+.photo-preview{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--kente-gold);display:block;}
+.photo-remove{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:var(--kente-red);border:none;color:#fff;font-size:.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+.photo-placeholder{font-size:2.5rem;margin-bottom:.4rem;opacity:.4;}
+.photo-upload-hint{font-family:'Bebas Neue',sans-serif;letter-spacing:.2em;font-size:.65rem;color:var(--kente-gold);opacity:.7;}
+.photo-upload-sub{font-size:.72rem;color:var(--pale);opacity:.4;margin-top:.2rem;font-style:italic;}
+
+/* PHONE in modal */
+.phone-link{color:var(--kente-gold);text-decoration:none;font-style:italic;}
+.phone-link:hover{text-decoration:underline;}
+
+/* Card photo */
+.avatar-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+
+/* Modal big photo */
+.modal-photo-big{width:90px;height:90px;border-radius:50%;object-fit:cover;}
+
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;padding:.9rem 1.5rem;font-family:'Bebas Neue',sans-serif;letter-spacing:.2em;font-size:.75rem;z-index:999;animation:riseIn .4s ease,sinkOut .5s 2.6s forwards;box-shadow:0 6px 24px rgba(0,0,0,.5);border-left:4px solid var(--kente-gold);background:var(--mid);color:var(--creme);max-width:300px;}
+
+footer{text-align:center;padding:2.5rem 2rem;font-size:.82rem;color:var(--pale);opacity:.45;font-style:italic;border-top:1px solid rgba(242,169,0,.08);}
+
+/* ADMIN BAR */
+.admin-bar{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:.5rem 1.5rem;background:rgba(14,10,4,.95);border-bottom:2px solid var(--kente-gold);backdrop-filter:blur(8px);}
+.admin-bar-left{display:flex;align-items:center;gap:.8rem;}
+.admin-label{font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.68rem;color:var(--kente-gold);}
+.admin-dot{width:8px;height:8px;border-radius:50%;background:var(--kente-green);box-shadow:0 0 6px var(--kente-green);}
+.btn-logout{background:none;border:1px solid rgba(242,169,0,.3);color:var(--pale);font-family:'Bebas Neue',sans-serif;letter-spacing:.2em;font-size:.62rem;padding:.3rem .8rem;cursor:pointer;transition:all .2s;}
+.btn-logout:hover{border-color:var(--kente-red);color:var(--kente-red);}
+.btn-export{display:inline-flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,var(--kente-gold),var(--wax-orange));color:var(--ink);font-family:'Bebas Neue',sans-serif;letter-spacing:.25em;font-size:.68rem;padding:.45rem 1.2rem;border:none;cursor:pointer;transition:filter .25s,transform .25s;}
+.btn-export:hover{filter:brightness(1.1);transform:translateY(-1px);}
+.btn-export-public{display:inline-flex;align-items:center;gap:.4rem;background:none;border:1px solid rgba(242,169,0,.4);color:var(--kente-gold);font-family:'Bebas Neue',sans-serif;letter-spacing:.25em;font-size:.68rem;padding:.45rem 1.2rem;cursor:pointer;transition:all .25s;margin-right:.6rem;}
+.btn-export-public:hover{background:rgba(242,169,0,.08);}
+
+/* PASSWORD MODAL */
+.pwd-modal{max-width:380px;text-align:center;}
+.pwd-title{font-family:'Cinzel Decorative',serif;font-size:1.2rem;color:var(--creme);margin-bottom:.5rem;}
+.pwd-sub{font-size:.88rem;color:var(--pale);opacity:.6;font-style:italic;margin-bottom:1.5rem;line-height:1.6;}
+.pwd-input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(242,169,0,.3);color:var(--creme);padding:.75rem 1rem;font-family:'Lora',serif;font-size:1rem;outline:none;text-align:center;letter-spacing:.2em;border-radius:1px;transition:border-color .25s;}
+.pwd-input:focus{border-color:var(--kente-gold);}
+.pwd-error{color:var(--kente-red);font-size:.8rem;font-family:'Bebas Neue',sans-serif;letter-spacing:.15em;margin-top:.6rem;min-height:1.2em;}
+.pwd-btn{width:100%;margin-top:1rem;background:linear-gradient(135deg,var(--kente-gold),var(--wax-orange));color:var(--ink);font-family:'Bebas Neue',sans-serif;letter-spacing:.35em;font-size:.82rem;padding:.9rem;border:none;cursor:pointer;transition:filter .3s;}
+.pwd-btn:hover{filter:brightness(1.1);}
+
+/* EXPORT OVERLAY */
+.export-overlay{position:fixed;inset:0;background:rgba(14,10,4,.9);z-index:400;display:none;align-items:center;justify-content:center;flex-direction:column;gap:1rem;}
+.export-overlay.open{display:flex;}
+.export-spinner{width:48px;height:48px;border:3px solid rgba(242,169,0,.2);border-top-color:var(--kente-gold);border-radius:50%;animation:spin .8s linear infinite;}
+.export-msg{font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.8rem;color:var(--kente-gold);}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@keyframes riseIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+@keyframes popIn{from{opacity:0;transform:scale(.93) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes sinkOut{to{opacity:0;transform:translateY(10px)}}
+
+/* FAUNA & FLORA ANGOLANA */
+.angola-critter{position:absolute;pointer-events:none;opacity:0;animation:critterFade 2s forwards;}
+.angola-critter svg{display:block;}
+@keyframes critterFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes floatBird{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+@keyframes swayTree{0%,100%{transform-origin:bottom center;transform:rotate(-1deg)}50%{transform-origin:bottom center;transform:rotate(1.5deg)}}
+@keyframes driftGator{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+@keyframes floatButterfly{0%{transform:translate(0,0) rotate(-5deg)}25%{transform:translate(6px,-8px) rotate(5deg)}50%{transform:translate(12px,-3px) rotate(-3deg)}75%{transform:translate(6px,-10px) rotate(4deg)}100%{transform:translate(0,0) rotate(-5deg)}}
+
+@media(max-width:640px){.angola-critter{display:none;}}
+
+@media(max-width:640px){.form-row{grid-template-columns:1fr;}.stats-bar{gap:1.5rem;}.gen-members{gap:.9rem;}.person-card{width:90px;}.avatar-ring{width:62px;height:62px;}}
+</style>
+</head>
+<body>
+
+<!-- ADMIN BAR (só visível para admins) -->
+<div class="admin-bar" id="adminBar" style="display:none">
+  <div class="admin-bar-left">
+    <div class="admin-dot"></div>
+    <span class="admin-label">Modo Administrador</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:.6rem;">
+    <button class="btn-export" onclick="exportPNG()">⬇ BAIXAR ÁRVORE PNG</button>
+    <button class="btn-logout" onclick="logoutAdmin()">SAIR</button>
+  </div>
+</div>
+
+<!-- BOTÃO EXPORTAR (visível para todos) -->
+<div id="publicExportBar" style="position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:.5rem 1.5rem;background:rgba(14,10,4,.85);border-bottom:1px solid rgba(242,169,0,.15);backdrop-filter:blur(8px);">
+  <span style="font-family:'Bebas Neue',sans-serif;letter-spacing:.3em;font-size:.65rem;color:var(--pale);opacity:.5;">FAMÍLIA CASSOMA</span>
+  <div style="display:flex;gap:.6rem;align-items:center;">
+    <button class="btn-export-public" onclick="exportPNG()">⬇ BAIXAR PNG</button>
+    <button class="btn-export-public" onclick="openPwdModal()" style="border-color:rgba(242,169,0,.6);color:var(--kente-gold);">🔑 ADMIN</button>
+  </div>
+</div>
+
+<!-- MODAL SENHA -->
+<div class="overlay" id="pwdOverlay" onclick="closePwdOvl(event)">
+  <div class="modal pwd-modal">
+    <div class="modal-kente-top"></div>
+    <button class="modal-close" onclick="document.getElementById('pwdOverlay').classList.remove('open')">✕</button>
+    <div class="modal-body">
+      <div style="font-size:2.5rem;margin-bottom:1rem;">🔑</div>
+      <h3 class="pwd-title">Área de Administração</h3>
+      <p class="pwd-sub">Introduza a senha para poder adicionar,<br>editar e remover membros da família.</p>
+      <input class="pwd-input" id="pwdInput" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPassword()">
+      <div class="pwd-error" id="pwdError"></div>
+      <button class="pwd-btn" onclick="checkPassword()">ENTRAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY DE EXPORTAÇÃO -->
+<div class="export-overlay" id="exportOverlay">
+  <div class="export-spinner"></div>
+  <div class="export-msg">A GERAR IMAGEM DA ÁRVORE...</div>
+</div>
+
+<div class="kente-band" style="margin-top:44px"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-geo"></div>
+  <div class="hero-glow"></div>
+  <div class="corner corner-tl"><svg viewBox="0 0 120 120" fill="none"><polygon points="60,5 115,55 60,105 5,55" stroke="#F2A900" stroke-width="1.5" fill="none" opacity=".6"/><polygon points="60,20 100,55 60,90 20,55" stroke="#C0392B" stroke-width="1" fill="none" opacity=".5"/><polygon points="60,35 85,55 60,75 35,55" stroke="#1A6B3C" stroke-width="1" fill="none" opacity=".4"/><line x1="5" y1="55" x2="115" y2="55" stroke="#F2A900" stroke-width=".8" opacity=".4"/><line x1="60" y1="5" x2="60" y2="105" stroke="#F2A900" stroke-width=".8" opacity=".4"/></svg></div>
+  <div class="corner corner-tr"><svg viewBox="0 0 120 120" fill="none"><polygon points="60,5 115,55 60,105 5,55" stroke="#F2A900" stroke-width="1.5" fill="none" opacity=".6"/><polygon points="60,20 100,55 60,90 20,55" stroke="#1B4F8A" stroke-width="1" fill="none" opacity=".5"/><polygon points="60,35 85,55 60,75 35,55" stroke="#6B2D6B" stroke-width="1" fill="none" opacity=".4"/></svg></div>
+  <div class="corner corner-bl"><svg viewBox="0 0 120 120" fill="none"><polygon points="60,5 115,55 60,105 5,55" stroke="#F2A900" stroke-width="1.5" fill="none" opacity=".6"/><polygon points="60,20 100,55 60,90 20,55" stroke="#E05C1A" stroke-width="1" fill="none" opacity=".5"/></svg></div>
+  <div class="corner corner-br"><svg viewBox="0 0 120 120" fill="none"><polygon points="60,5 115,55 60,105 5,55" stroke="#F2A900" stroke-width="1.5" fill="none" opacity=".6"/><polygon points="60,20 100,55 60,90 20,55" stroke="#0D7377" stroke-width="1" fill="none" opacity=".5"/></svg></div>
+
+  <!-- Baobá — esquerda inferior -->
+  <div class="angola-critter" style="bottom:60px;left:3%;animation-delay:.8s;animation-duration:1.8s;">
+    <svg width="70" height="110" viewBox="0 0 70 110" fill="none" style="animation:swayTree 5s ease-in-out 2s infinite;">
+      <rect x="28" y="58" width="14" height="48" rx="3" fill="#3D1C08" opacity=".55"/>
+      <ellipse cx="35" cy="48" rx="28" ry="22" fill="#1A6B3C" opacity=".35"/>
+      <ellipse cx="20" cy="54" rx="16" ry="12" fill="#1A6B3C" opacity=".28"/>
+      <ellipse cx="50" cy="52" rx="18" ry="13" fill="#1A6B3C" opacity=".28"/>
+      <ellipse cx="35" cy="38" rx="20" ry="16" fill="#1A6B3C" opacity=".22"/>
+    </svg>
+  </div>
+
+  <!-- Palanca negra — direita, silhueta -->
+  <div class="angola-critter" style="bottom:55px;right:3%;animation-delay:1.2s;animation-duration:1.8s;">
+    <svg width="90" height="80" viewBox="0 0 90 80" fill="none" opacity=".45">
+      <!-- corpo -->
+      <ellipse cx="42" cy="50" rx="26" ry="14" fill="#1A0F04"/>
+      <!-- cabeça -->
+      <ellipse cx="72" cy="40" rx="12" ry="10" fill="#1A0F04"/>
+      <!-- pescoço -->
+      <path d="M58 44 Q65 35 68 38" stroke="#1A0F04" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <!-- chifres curvados -->
+      <path d="M70 32 Q68 18 62 12" stroke="#1A0F04" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <path d="M76 31 Q76 17 70 11" stroke="#1A0F04" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <!-- patas -->
+      <line x1="28" y1="62" x2="26" y2="76" stroke="#1A0F04" stroke-width="4" stroke-linecap="round"/>
+      <line x1="38" y1="63" x2="36" y2="77" stroke="#1A0F04" stroke-width="4" stroke-linecap="round"/>
+      <line x1="50" y1="63" x2="50" y2="77" stroke="#1A0F04" stroke-width="4" stroke-linecap="round"/>
+      <line x1="60" y1="62" x2="61" y2="76" stroke="#1A0F04" stroke-width="4" stroke-linecap="round"/>
+      <!-- cauda -->
+      <path d="M16 50 Q8 44 10 38" stroke="#1A0F04" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- Papagaio cinzento — canto superior direito, pousado -->
+  <div class="angola-critter" style="top:120px;right:8%;animation-delay:1.6s;animation-duration:1.8s;">
+    <svg width="36" height="48" viewBox="0 0 36 48" fill="none" opacity=".5" style="animation:floatBird 4s ease-in-out 2.5s infinite;">
+      <!-- corpo -->
+      <ellipse cx="18" cy="28" rx="10" ry="13" fill="#888" opacity=".7"/>
+      <!-- cabeça -->
+      <ellipse cx="18" cy="14" rx="8" ry="8" fill="#999" opacity=".7"/>
+      <!-- bico -->
+      <path d="M22 16 Q27 18 24 20 Q22 19 20 17Z" fill="#C45C2E" opacity=".8"/>
+      <!-- cauda -->
+      <path d="M18 40 Q14 50 12 52" stroke="#C0392B" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".6"/>
+      <path d="M18 40 Q18 52 18 54" stroke="#C0392B" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".6"/>
+      <!-- asa -->
+      <path d="M10 22 Q4 30 8 38 Q14 34 18 36" fill="#777" opacity=".5"/>
+      <!-- olho -->
+      <circle cx="20" cy="12" r="2" fill="#F2A900" opacity=".9"/>
+      <circle cx="20" cy="12" r="1" fill="#1A0F04"/>
+      <!-- poleiro linha -->
+      <line x1="8" y1="42" x2="28" y2="42" stroke="#3D1C08" stroke-width="2" stroke-linecap="round" opacity=".4"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <p class="eyebrow">Brasão de Armas · Família</p>
+    <h1 class="hero-title">CASSOMA</h1>
+    <p class="hero-sub">Descrição Heráldica, Origens e Significado</p>
+    <div class="stripe-divider">
+      <span style="background:var(--kente-gold)"></span>
+      <span style="background:var(--kente-red)"></span>
+      <span style="background:var(--kente-green)"></span>
+      <span style="background:var(--kente-blue)"></span>
+      <span style="background:var(--chitenge-plum)"></span>
+      <span style="background:var(--wax-orange)"></span>
+      <span style="background:var(--wax-teal)"></span>
+      <span style="background:var(--kente-gold)"></span>
+    </div>
+    <p class="hero-desc">A família Cassoma tem raízes em três territórios que percorrem Angola de leste a oeste, do interior ao litoral — um trajecto que espelha a própria história do país. Do lado paterno, origens em Huambo e nas Lundas. Do lado materno, Luanda, onde o Atlântico termina a viagem do interior.</p>
+    <span class="badge-angola">📍 Angola · Luanda · Huambo · Lundas</span>
+    <div style="margin-top:1.8rem;display:flex;flex-direction:column;gap:.5rem;align-items:center;opacity:0;animation:riseIn 1s 1.5s forwards;">
+      <span style="font-family:'Cinzel Decorative',serif;font-size:.9rem;color:var(--kente-gold);font-style:italic;">Oku Soma, Oku Hanya · Hondeka Kubakala</span>
+      <span style="font-family:'Lora',serif;font-size:.8rem;color:var(--pale);opacity:.7;font-style:italic;">Liderar é servir · Lembra de ser</span>
+    </div>
+    <div class="scroll-hint" onclick="document.getElementById('arvore').scrollIntoView({behavior:'smooth'})">↓ &nbsp; Construir a Árvore</div>
+  </div>
+</section>
+
+<div class="kente-band-thin"></div>
+
+<!-- TREE -->
+<section class="tree-section" id="arvore" style="position:relative;overflow:hidden;">
+
+  <!-- Jacaré — canto inferior esquerdo da secção -->
+  <div class="angola-critter" style="bottom:20px;left:1%;animation-delay:.5s;">
+    <svg width="100" height="38" viewBox="0 0 100 38" fill="none" opacity=".3" style="animation:driftGator 6s ease-in-out 2s infinite;">
+      <!-- corpo principal -->
+      <ellipse cx="50" cy="22" rx="38" ry="10" fill="#1A6B3C"/>
+      <!-- cabeça -->
+      <path d="M82 18 L100 14 L100 20 L88 24 Z" fill="#1A6B3C"/>
+      <!-- mandíbula inferior -->
+      <path d="M82 22 L100 20 L100 24 L84 26 Z" fill="#145a32"/>
+      <!-- olho -->
+      <circle cx="90" cy="17" r="2.5" fill="#F2A900" opacity=".9"/>
+      <circle cx="90" cy="17" r="1.2" fill="#1A0F04"/>
+      <!-- escamas -->
+      <path d="M20 14 Q30 10 40 14 Q50 10 60 14 Q70 10 80 14" stroke="#145a32" stroke-width="1.5" fill="none" opacity=".6"/>
+      <!-- cauda -->
+      <path d="M12 22 Q4 20 2 16 Q0 12 4 14" stroke="#1A6B3C" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <!-- patas -->
+      <line x1="25" y1="30" x2="20" y2="38" stroke="#1A6B3C" stroke-width="3" stroke-linecap="round"/>
+      <line x1="40" y1="31" x2="37" y2="38" stroke="#1A6B3C" stroke-width="3" stroke-linecap="round"/>
+      <line x1="60" y1="31" x2="58" y2="38" stroke="#1A6B3C" stroke-width="3" stroke-linecap="round"/>
+      <line x1="74" y1="30" x2="72" y2="38" stroke="#1A6B3C" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <!-- Borboleta Charaxes — direita da secção, flutuando -->
+  <div class="angola-critter" style="top:80px;right:4%;animation-delay:1s;">
+    <svg width="44" height="40" viewBox="0 0 44 40" fill="none" opacity=".4" style="animation:floatButterfly 7s ease-in-out 2s infinite;">
+      <!-- asas superiores -->
+      <path d="M22 18 Q10 4 4 10 Q2 20 14 24 Z" fill="#F2A900"/>
+      <path d="M22 18 Q34 4 40 10 Q42 20 30 24 Z" fill="#F2A900"/>
+      <!-- asas inferiores -->
+      <path d="M22 22 Q8 28 6 36 Q14 38 22 28 Z" fill="#C45C2E" opacity=".8"/>
+      <path d="M22 22 Q36 28 38 36 Q30 38 22 28 Z" fill="#C45C2E" opacity=".8"/>
+      <!-- corpo -->
+      <ellipse cx="22" cy="20" rx="2.5" ry="10" fill="#1A0F04" opacity=".7"/>
+      <!-- antenas -->
+      <path d="M21 10 Q18 4 16 2" stroke="#1A0F04" stroke-width="1" stroke-linecap="round" fill="none" opacity=".6"/>
+      <path d="M23 10 Q26 4 28 2" stroke="#1A0F04" stroke-width="1" stroke-linecap="round" fill="none" opacity=".6"/>
+    </svg>
+  </div>
+
+  <!-- Corvo-pega em voo — esquerda do meio da secção -->
+  <div class="angola-critter" style="top:40%;left:2%;animation-delay:1.4s;">
+    <svg width="52" height="36" viewBox="0 0 52 36" fill="none" opacity=".35" style="animation:floatBird 5s ease-in-out 3s infinite;">
+      <!-- asa esquerda -->
+      <path d="M26 18 Q10 8 2 14 Q8 22 20 22 Z" fill="#1A0F04"/>
+      <!-- asa direita -->
+      <path d="M26 18 Q42 8 50 14 Q44 22 32 22 Z" fill="#1A0F04"/>
+      <!-- mancha branca asa direita -->
+      <path d="M26 18 Q38 12 44 16 Q40 20 32 20 Z" fill="#F5E6C8" opacity=".6"/>
+      <!-- corpo -->
+      <ellipse cx="26" cy="20" rx="8" ry="5" fill="#1A0F04"/>
+      <!-- cabeça -->
+      <circle cx="34" cy="16" r="5" fill="#1A0F04"/>
+      <!-- bico -->
+      <path d="M38 15 L44 14 L42 17 Z" fill="#1A0F04"/>
+      <!-- peito branco -->
+      <ellipse cx="26" cy="21" rx="4" ry="3" fill="#F5E6C8" opacity=".5"/>
+      <!-- cauda -->
+      <path d="M18 22 Q12 28 10 30" stroke="#1A0F04" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M20 23 Q15 30 14 32" stroke="#1A0F04" stroke-width="2" stroke-linecap="round" fill="none"/>
+    </svg>
+  </div>
+  <div class="sec-header">
+    <p class="sec-eyebrow">Genealogia · Família Cassoma · Angola</p>
+    <h2 class="sec-title" style="text-align:center">A <em>Árvore</em> da Família</h2>
+    <p style="text-align:center;max-width:620px;margin:.8rem auto 0;font-size:.95rem;line-height:1.85;color:var(--pale);opacity:.75;font-style:italic;">O apelido Cassoma carrega consigo um título antigo. Na tradição Umbundu e Kimbundu, <em>Soma</em> designa uma pessoa de autoridade comunitária — o líder, aquele em torno de quem a comunidade se organiza. O prefixo <em>Ka-</em> indica o adjacente, aquele que se coloca ao lado do Soma e guarda o que ele disse.</p>
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-num" id="totalCount">0</div><div class="stat-label">Membros</div></div>
+      <div class="stat"><div class="stat-num" id="genCount">0</div><div class="stat-label">Gerações</div></div>
+      <div class="stat"><div class="stat-num" id="aliveCount">0</div><div class="stat-label">Vivos</div></div>
+    </div>
+  </div>
+  <div class="tree-canvas" id="treeCanvas"></div>
+</section>
+
+<div class="kente-band-thin"></div>
+
+<div class="bottom-add" id="bottomAdd" style="display:none">
+  <h3 class="add-title" style="text-align:center">Adicionar à Árvore</h3>
+  <p class="add-desc" style="text-align:center">Avança sempre, recorda sempre.<br>Regista os membros da família Cassoma e preserva a sua história para as gerações futuras.</p>
+  <div style="text-align:center">
+    <button class="btn-primary" onclick="openAddForm()"><div class="btn-primary-inner">+ ADICIONAR MEMBRO DA FAMÍLIA</div></button>
+  </div>
+</div>
+
+<!-- DIVISAS -->
+<div style="text-align:center;padding:3.5rem 2rem 1rem;max-width:700px;margin:0 auto;position:relative;">
+
+  <!-- Welwitschia mirabilis — esquerda, planta endémica de Angola -->
+  <div class="angola-critter" style="position:absolute;left:-60px;top:20px;animation-delay:.6s;">
+    <svg width="65" height="70" viewBox="0 0 65 70" fill="none" opacity=".35" style="animation:swayTree 7s ease-in-out 2s infinite;">
+      <!-- tronco baixo -->
+      <ellipse cx="32" cy="58" rx="12" ry="8" fill="#3D1C08" opacity=".7"/>
+      <!-- folhas longas e onduladas, característica da welwitschia -->
+      <path d="M20 56 Q4 44 2 28 Q8 24 14 36 Q16 48 24 54Z" fill="#1A6B3C" opacity=".6"/>
+      <path d="M22 54 Q6 38 10 18 Q16 16 18 30 Q18 44 26 52Z" fill="#1A6B3C" opacity=".5"/>
+      <path d="M44 56 Q60 44 62 28 Q56 24 50 36 Q48 48 40 54Z" fill="#1A6B3C" opacity=".6"/>
+      <path d="M42 54 Q58 38 54 18 Q48 16 46 30 Q46 44 38 52Z" fill="#1A6B3C" opacity=".5"/>
+      <!-- cone central -->
+      <ellipse cx="32" cy="50" rx="6" ry="4" fill="#C45C2E" opacity=".5"/>
+    </svg>
+  </div>
+
+  <!-- Elefante — direita, minimalista -->
+  <div class="angola-critter" style="position:absolute;right:-55px;top:10px;animation-delay:1s;">
+    <svg width="68" height="72" viewBox="0 0 68 72" fill="none" opacity=".3">
+      <!-- corpo -->
+      <ellipse cx="36" cy="46" rx="22" ry="16" fill="#4a4a4a"/>
+      <!-- cabeça -->
+      <ellipse cx="56" cy="32" rx="14" ry="12" fill="#4a4a4a"/>
+      <!-- tromba -->
+      <path d="M65 38 Q72 44 68 54 Q64 60 62 56" stroke="#4a4a4a" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <!-- orelha -->
+      <ellipse cx="50" cy="28" rx="10" ry="13" fill="#3a3a3a" opacity=".7"/>
+      <!-- presa -->
+      <path d="M64 40 Q70 42 68 46" stroke="#F5E6C8" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".7"/>
+      <!-- patas -->
+      <rect x="18" y="58" width="8" height="14" rx="3" fill="#4a4a4a"/>
+      <rect x="29" y="59" width="8" height="13" rx="3" fill="#4a4a4a"/>
+      <rect x="40" y="59" width="8" height="13" rx="3" fill="#4a4a4a"/>
+      <rect x="50" y="58" width="8" height="14" rx="3" fill="#4a4a4a"/>
+      <!-- cauda -->
+      <path d="M14 44 Q8 48 10 54" stroke="#4a4a4a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <!-- olho -->
+      <circle cx="60" cy="28" r="2" fill="#F2A900" opacity=".8"/>
+      <circle cx="60" cy="28" r="1" fill="#1A0F04"/>
+    </svg>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:1rem;align-items:center;">
+    <div style="background:rgba(196,92,46,.12);border:1px solid rgba(196,92,46,.35);padding:.7rem 2.2rem;max-width:420px;width:100%;">
+      <div style="font-family:'Bebas Neue',sans-serif;letter-spacing:.35em;font-size:.62rem;color:#C45C2E;margin-bottom:.3rem;">UMBUNDU · HUAMBO</div>
+      <div style="font-family:'Cinzel Decorative',serif;font-size:1rem;color:var(--creme);font-style:italic;">Oku Soma, Oku Hanya</div>
+      <div style="font-family:'Lora',serif;font-size:.82rem;color:var(--pale);opacity:.65;margin-top:.2rem;font-style:italic;">Liderar é servir</div>
+    </div>
+    <div style="background:rgba(27,58,107,.12);border:1px solid rgba(27,58,107,.45);padding:.7rem 2.2rem;max-width:420px;width:100%;">
+      <div style="font-family:'Bebas Neue',sans-serif;letter-spacing:.35em;font-size:.62rem;color:#5B7FB8;margin-bottom:.3rem;">KIMBUNDU · LUANDA</div>
+      <div style="font-family:'Cinzel Decorative',serif;font-size:1rem;color:var(--creme);font-style:italic;">Hondeka Kubakala</div>
+      <div style="font-family:'Lora',serif;font-size:.82rem;color:var(--pale);opacity:.65;margin-top:.2rem;font-style:italic;">Lembra de ser</div>
+    </div>
+  </div>
+</div>
+
+<div class="kente-band"></div>
+
+<footer style="text-align:center">Família Cassoma · Angola · Luanda · Huambo · Lundas<br><em>Uma família que veio do interior e fez morada na costa. Que atravessou água e carregou a terra de origem consigo.</em></footer>
+
+<!-- VIEW MODAL -->
+<div class="overlay" id="viewOverlay" onclick="closeViewOvl(event)">
+  <div class="modal">
+    <div class="modal-kente-top"></div>
+    <button class="modal-close" onclick="cancelDelete();document.getElementById('viewOverlay').classList.remove('open')">✕</button>
+    <div class="modal-body">
+      <div class="modal-avatar-wrap"><div class="modal-avatar-ring" id="vAvatarRing"><div class="modal-avatar-inner" id="vEmoji">👤</div></div></div>
+      <h2 class="modal-name" id="vName"></h2>
+      <div class="modal-role-badge"><span id="vRole"></span></div>
+      <div class="modal-sep"></div>
+      <div class="modal-fields" id="vFields"></div>
+      <div class="modal-note" id="vNote" style="display:none"></div>
+      <div class="modal-actions" id="vActions" style="display:none">
+        <button class="btn-edit" onclick="editFromView()">✏ EDITAR</button>
+        <button class="btn-delete" id="btnDeleteMain" onclick="showDeleteConfirm()">✕ REMOVER</button>
+      </div>
+      <!-- Inline delete confirmation -->
+      <div id="deleteConfirmBox" style="display:none;margin-top:1rem;padding:1rem;border:1px solid rgba(192,57,43,0.4);background:rgba(192,57,43,0.08);">
+        <p style="font-size:.88rem;color:var(--pale);margin-bottom:.8rem;text-align:center;font-style:italic;">Tem a certeza que deseja remover <strong id="deleteConfirmName" style="color:var(--creme);font-style:normal;"></strong> da árvore?</p>
+        <div style="display:flex;gap:.6rem;">
+          <button onclick="confirmDelete()" style="flex:1;padding:.6rem;background:var(--kente-red);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;letter-spacing:.2em;font-size:.72rem;cursor:pointer;">SIM, REMOVER</button>
+          <button onclick="cancelDelete()" style="flex:1;padding:.6rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:var(--pale);font-family:'Bebas Neue',sans-serif;letter-spacing:.2em;font-size:.72rem;cursor:pointer;">CANCELAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM MODAL -->
+<div class="overlay" id="formOverlay" onclick="closeFormOvl(event)">
+  <div class="modal form-modal">
+    <div class="modal-kente-top"></div>
+    <button class="modal-close" onclick="document.getElementById('formOverlay').classList.remove('open')">✕</button>
+    <div class="modal-body">
+      <h3 class="form-title" id="formTitle">Adicionar Membro</h3>
+      <input type="hidden" id="fEditId" value="">
+
+      <div class="form-group">
+        <label class="form-label">Ícone / Avatar</label>
+        <div class="emoji-grid" id="emojiGrid"></div>
+        <input type="hidden" id="fEmoji" value="👤">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Nome Completo *</label>
+        <input class="form-input" id="fName" placeholder="Ex: Eduardo Cassoma" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Geração</label>
+        <select class="form-select" id="fGen" onchange="updateParentOptions();updateSpouseOptions()">
+          <option value="1">Geração I — Fundadores / Ancestrais</option>
+          <option value="2">Geração II — Filhos</option>
+          <option value="3">Geração III — Netos</option>
+          <option value="4">Geração IV — Bisnetos</option>
+          <option value="5">Geração V — Trinetos</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="parentGroup">
+        <label class="form-label">Filho(a) de <span style="opacity:.5;font-size:.85em">(seleccione até 2)</span></label>
+        <select class="form-select" id="fParent" multiple size="4" style="min-height:80px;">
+        </select>
+        <div style="font-size:.7rem;color:var(--pale);opacity:.45;margin-top:.3rem;font-style:italic;">Segure Ctrl (ou Cmd no Mac) para seleccionar pai e mãe</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Cônjuge / Parceiro(a)</label>
+        <select class="form-select" id="fSpouse">
+          <option value="">— Sem cônjuge —</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Apelidos / Pseudónimos</label>
+        <input class="form-input" id="fNickname" placeholder="Ex: Zé, Kika, Mano Eduardo..." />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Papel na Família</label>
+        <input class="form-input" id="fRole" placeholder="Ex: Patriarca, Filho, Esposa, Neto..." />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Data de Nascimento</label>
+        <div class="form-row" style="grid-template-columns:1fr 1fr 1.4fr;">
+          <div class="form-group" style="margin-bottom:0">
+            <input class="form-input" id="fBornDay" placeholder="Dia" type="number" min="1" max="31" />
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <select class="form-select" id="fBornMonth">
+              <option value="">Mês</option>
+              <option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option>
+              <option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option>
+              <option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option>
+              <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <input class="form-input" id="fBornYear" placeholder="Ano" type="number" min="1800" max="2025" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Data de Falecimento</label>
+        <div class="form-row" style="grid-template-columns:1fr 1fr 1.4fr;">
+          <div class="form-group" style="margin-bottom:0">
+            <input class="form-input" id="fDiedDay" placeholder="Dia" type="number" min="1" max="31" />
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <select class="form-select" id="fDiedMonth">
+              <option value="">Mês</option>
+              <option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option>
+              <option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option>
+              <option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option>
+              <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <input class="form-input" id="fDiedYear" placeholder="Ano" type="number" min="1800" max="2025" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Local de Nascimento</label>
+        <input class="form-input" id="fPlace" placeholder="Ex: Malange, Angola" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Número de Telefone</label>
+        <input class="form-input" id="fPhone" placeholder="Ex: +244 923 456 789" type="tel" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Fotografia</label>
+        <div class="photo-upload-area" id="photoUploadArea" onclick="document.getElementById('fPhotoFile').click()">
+          <input type="file" id="fPhotoFile" accept="image/*" style="display:none" onchange="handlePhotoUpload(event)">
+          <div id="photoPreviewContainer">
+            <div class="photo-placeholder">📷</div>
+            <div class="photo-upload-hint">CLIQUE PARA CARREGAR FOTO</div>
+            <div class="photo-upload-sub">JPG, PNG ou WEBP · máx. 4MB</div>
+          </div>
+        </div>
+        <input type="hidden" id="fPhoto" value="">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Memória / Nota</label>
+        <textarea class="form-textarea" id="fNote" placeholder="Uma história, profissão, legado especial desta pessoa..."></textarea>
+      </div>
+
+      <button class="btn-submit" onclick="submitPerson()">GUARDAR NA ÁRVORE</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ══════════════════════════════════════════════════════
+//  🔥 CONFIGURAÇÃO FIREBASE — siga as instruções abaixo
+//  1. Aceda a https://console.firebase.google.com
+//  2. Crie um projecto (ex: "familia-cassoma")
+//  3. Vá a Project Settings → Web app → "Add app"
+//  4. Copie o objecto firebaseConfig e cole aqui
+//  5. No Firestore Database → Rules, coloque:
+//     allow read, write: if true;
+// ══════════════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyCZ_PYPobizORpQ2JkkwKNffsU6M6VGj_c",
+  authDomain: "familia-cassoma.firebaseapp.com",
+  projectId: "familia-cassoma",
+  storageBucket: "familia-cassoma.firebasestorage.app",
+  messagingSenderId: "466726163980",
+  appId: "1:466726163980:web:0b608f8354fed6299b8029",
+  measurementId: "G-MK3EK1KH5Y"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const colRef = collection(db, "membros");
+
+const EMOJIS = ['👤','👴🏿','👵🏿','👨🏿','👩🏿','👦🏿','👧🏿','🧒🏿','👶🏿','🧑🏿','🧔🏿','🧓🏿','🫅🏿','👑','🌿','🌳','⭐','🕊️','🙏🏿','💛'];
+const GEN_CFG = {
+  '1':{label:'GERAÇÃO I',   color:'var(--kente-gold)',    bg:'rgba(242,169,0,0.12)',   border:'rgba(242,169,0,0.35)'},
+  '2':{label:'GERAÇÃO II',  color:'var(--kente-red)',     bg:'rgba(192,57,43,0.12)',   border:'rgba(192,57,43,0.35)'},
+  '3':{label:'GERAÇÃO III', color:'var(--kente-green)',   bg:'rgba(26,107,60,0.12)',   border:'rgba(26,107,60,0.35)'},
+  '4':{label:'GERAÇÃO IV',  color:'var(--kente-blue)',    bg:'rgba(27,79,138,0.12)',   border:'rgba(27,79,138,0.35)'},
+  '5':{label:'GERAÇÃO V',   color:'var(--chitenge-plum)', bg:'rgba(107,45,107,0.12)',  border:'rgba(107,45,107,0.35)'},
+};
+
+let people = [];
+let viewingId = null;
+
+// ══════════════════════════════════════════════════════
+//  🔑 SENHA DE ADMINISTRADOR — altere aqui a sua senha
+// ══════════════════════════════════════════════════════
+const ADMIN_PASSWORD = "cassoma2025";
+
+let isAdmin = sessionStorage.getItem('cassoma_admin') === 'true';
+
+function applyAdminUI(){
+  document.getElementById('adminBar').style.display       = isAdmin ? 'flex' : 'none';
+  document.getElementById('publicExportBar').style.display = isAdmin ? 'none' : 'flex';
+  document.getElementById('bottomAdd').style.display      = isAdmin ? 'block' : 'none';
+  const vActions = document.getElementById('vActions');
+  if(vActions) vActions.style.display = isAdmin ? 'flex' : 'none';
+  // Botões de adicionar por geração
+  document.querySelectorAll('.gen-add-btn').forEach(b => b.style.display = isAdmin ? '' : 'none');
+}
+
+function openPwdModal(){
+  document.getElementById('pwdInput').value='';
+  document.getElementById('pwdError').textContent='';
+  document.getElementById('pwdOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('pwdInput').focus(),200);
+}
+function closePwdOvl(e){ if(e.target===document.getElementById('pwdOverlay')) document.getElementById('pwdOverlay').classList.remove('open'); }
+
+function checkPassword(){
+  const val = document.getElementById('pwdInput').value;
+  if(val === ADMIN_PASSWORD){
+    isAdmin = true;
+    sessionStorage.setItem('cassoma_admin','true');
+    document.getElementById('pwdOverlay').classList.remove('open');
+    applyAdminUI();
+    toast('Bem-vindo, administrador! ✓');
+  } else {
+    document.getElementById('pwdError').textContent = 'SENHA INCORRECTA';
+    document.getElementById('pwdInput').value='';
+    document.getElementById('pwdInput').focus();
+  }
+}
+
+function logoutAdmin(){
+  isAdmin = false;
+  sessionStorage.removeItem('cassoma_admin');
+  applyAdminUI();
+  toast('Sessão de administrador encerrada.');
+}
+
+/* ── EXPORTAR PNG ── */
+async function exportPNG(){
+  const exportOverlay = document.getElementById('exportOverlay');
+  exportOverlay.classList.add('open');
+  try {
+    // Carrega html2canvas dinamicamente
+    if(!window.html2canvas){
+      await new Promise((res,rej)=>{
+        const s=document.createElement('script');
+        s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        s.onload=res; s.onerror=rej;
+        document.head.appendChild(s);
+      });
+    }
+    const section = document.getElementById('arvore');
+    const canvas = await window.html2canvas(section, {
+      backgroundColor: '#0E0A04',
+      scale: 2,
+      useCORS: true,
+      logging: false,
+    });
+    const link = document.createElement('a');
+    link.download = 'arvore-familia-cassoma.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    toast('Imagem baixada com sucesso! 🌳');
+  } catch(err){
+    toast('Erro ao gerar imagem. Tente novamente.');
+  } finally {
+    exportOverlay.classList.remove('open');
+  }
+}
+
+// Escuta alterações em tempo real — actualiza automaticamente para todos
+onSnapshot(colRef, snapshot => {
+  people = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  render();
+  applyAdminUI();
+});
+
+async function save(person){
+  // Verifica tamanho — Firestore tem limite de 1MB por documento
+  const sizeKB = Math.round(JSON.stringify(person).length / 1024);
+  if(sizeKB > 900){
+    toast('Erro: dados demasiado grandes. Tente uma foto menor.');
+    return;
+  }
+  await setDoc(doc(db, "membros", person.id), person);
+}
+
+async function remove(id){
+  await deleteDoc(doc(db, "membros", id));
+}
+
+
+/* ── PHOTO UPLOAD ── */
+function handlePhotoUpload(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 10*1024*1024){ toast('Foto muito grande. Máximo 10MB.'); return; }
+  compressImage(file, 800, 0.75, compressed => {
+    document.getElementById('fPhoto').value = compressed;
+    renderPhotoPreview(compressed);
+  });
+}
+
+function compressImage(file, maxSize, quality, callback){
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let w = img.width, h = img.height;
+      if(w > maxSize || h > maxSize){
+        if(w > h){ h = Math.round(h * maxSize / w); w = maxSize; }
+        else { w = Math.round(w * maxSize / h); h = maxSize; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      // Reduz qualidade até ficar abaixo de 700KB (safe para Firestore)
+      let q = quality;
+      let result = canvas.toDataURL('image/jpeg', q);
+      while(result.length > 700*1024 && q > 0.3){
+        q -= 0.1;
+        result = canvas.toDataURL('image/jpeg', q);
+      }
+      callback(result);
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderPhotoPreview(src){
+  const c = document.getElementById('photoPreviewContainer');
+  if(src){
+    c.innerHTML=`<div class="photo-preview-wrap"><img class="photo-preview" src="${src}"><button class="photo-remove" type="button" onclick="clearPhoto(event)">✕</button></div><div class="photo-upload-hint" style="margin-top:.3rem">ALTERAR FOTO</div>`;
+  } else {
+    c.innerHTML=`<div class="photo-placeholder">📷</div><div class="photo-upload-hint">CLIQUE PARA CARREGAR FOTO</div><div class="photo-upload-sub">JPG, PNG ou WEBP · máx. 4MB</div>`;
+  }
+}
+
+function clearPhoto(e){
+  e.stopPropagation();
+  document.getElementById('fPhoto').value='';
+  document.getElementById('fPhotoFile').value='';
+  renderPhotoPreview('');
+}
+
+/* ── RENDER ── */
+function render(){
+  const canvas = document.getElementById('treeCanvas');
+  canvas.innerHTML = '';
+  document.getElementById('totalCount').textContent = people.length;
+  const gens = [...new Set(people.map(p=>p.gen))];
+  document.getElementById('genCount').textContent  = gens.length;
+  document.getElementById('aliveCount').textContent = people.filter(p=>!p.died).length;
+
+  if(!people.length){
+    canvas.innerHTML=`<div class="empty-tree-msg"><div class="empty-icon">🌱</div><div class="empty-title">A árvore aguarda as suas raízes</div><div class="empty-desc">Adicione o primeiro membro da família Cassoma<br>para começar a construir a árvore genealógica.</div></div>`;
+    return;
+  }
+
+  // SVG overlay para as linhas de linhagem
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.id = 'lineageSvg';
+  svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:visible;';
+  canvas.style.position = 'relative';
+  canvas.appendChild(svg);
+
+  const byGen={};
+  people.forEach(p=>{ if(!byGen[p.gen]) byGen[p.gen]=[]; byGen[p.gen].push(p); });
+  Object.keys(byGen).sort((a,b)=>+a-+b).forEach(g=>{
+    const cfg = GEN_CFG[g]||{label:`GERAÇÃO ${g}`,color:'var(--kente-gold)',bg:'rgba(242,169,0,0.1)',border:'rgba(242,169,0,0.3)'};
+    const row = document.createElement('div');
+    row.className='gen-row'; row.id=`gen-row-${g}`;
+    row.style.position='relative'; row.style.zIndex='2';
+    row.innerHTML=`
+      <div class="gen-header">
+        <span class="gen-badge" style="background:${cfg.bg};color:${cfg.color};border:1px solid ${cfg.border}">${cfg.label}</span>
+        <div class="gen-line" style="background:linear-gradient(90deg,${cfg.color}60,transparent)"></div>
+        <button class="gen-add-btn" style="color:${cfg.color};border:1px dashed ${cfg.border}" onclick="openAddFormGen(${g})">+ ADICIONAR</button>
+      </div>
+      <div class="gen-members" id="gen-members-${g}"></div>`;
+    canvas.appendChild(row);
+    const membersDiv = row.querySelector('.gen-members');
+    byGen[g].forEach(p=>membersDiv.appendChild(createCard(p)));
+  });
+
+  // Aguarda dois frames para o browser fazer layout completo antes de medir posições
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    drawLines(svg);
+  }));
+}
+
+/* ── LINHAS DE LINHAGEM ── */
+function getCoords(el, svgRect){
+  const r = el.getBoundingClientRect();
+  // Coordenadas relativas ao canto superior esquerdo do SVG element
+  return {
+    cx:     r.left + r.width  / 2 - svgRect.left,
+    top:    r.top                  - svgRect.top,
+    bottom: r.bottom               - svgRect.top,
+  };
+}
+
+function drawLines(svg){
+  svg.innerHTML = '';
+  const hasPairs = people.some(p=>p.parentId) || people.some(p=>p.spouseId);
+  if(!hasPairs) return;
+
+  // Usa o próprio SVG como origem — elimina qualquer problema de scroll ou transforms
+  const svgRect = svg.getBoundingClientRect();
+
+  // Garante que o SVG cobre toda a altura do canvas
+  const canvasEl = svg.parentElement;
+  svg.setAttribute('height', canvasEl.scrollHeight);
+  svg.setAttribute('width',  canvasEl.scrollWidth);
+
+  const lineColors = {
+    '1':'#F2A900','2':'#C0392B','3':'#1A6B3C','4':'#1B4F8A','5':'#6B2D6B'
+  };
+
+  const mkLine = (x1,y1,x2,y2,color,dash='5,4') => {
+    const l = document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',Math.round(x1)); l.setAttribute('y1',Math.round(y1));
+    l.setAttribute('x2',Math.round(x2)); l.setAttribute('y2',Math.round(y2));
+    l.setAttribute('stroke',color);
+    l.setAttribute('stroke-width','1.5');
+    l.setAttribute('stroke-opacity','0.6');
+    l.setAttribute('stroke-dasharray',dash);
+    svg.appendChild(l);
+  };
+  const mkDot = (cx,cy,r,color,op='.7') => {
+    const d = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    d.setAttribute('cx',Math.round(cx)); d.setAttribute('cy',Math.round(cy));
+    d.setAttribute('r',r); d.setAttribute('fill',color); d.setAttribute('opacity',op);
+    svg.appendChild(d);
+  };
+
+  // ── LINHAS PAI → FILHOS ──
+  const childrenByParent = {};
+  people.forEach(child => {
+    const ids = child.parentIds?.length ? child.parentIds : (child.parentId ? [child.parentId] : []);
+    ids.forEach(pid => {
+      if(!childrenByParent[pid]) childrenByParent[pid] = [];
+      childrenByParent[pid].push(child);
+    });
+  });
+
+  Object.entries(childrenByParent).forEach(([parentId, children]) => {
+    const parent = people.find(p => p.id === parentId);
+    if(!parent) return;
+
+    const parentEl = document.querySelector(`[data-id="${parent.id}"] .avatar-ring`);
+    if(!parentEl) return;
+
+    // Re-obtém svgRect no momento do cálculo (por se o DOM tiver reflow)
+    const sr = svg.getBoundingClientRect();
+    const pC = getCoords(parentEl, sr);
+    const color = lineColors[parent.gen] || '#F2A900';
+
+    const childCoords = children.map(child => {
+      const el = document.querySelector(`[data-id="${child.id}"] .avatar-ring`);
+      if(!el) return null;
+      return getCoords(el, sr);
+    }).filter(Boolean);
+
+    if(!childCoords.length) return;
+
+    const childTopY  = Math.min(...childCoords.map(c => c.top));
+    const junctionY  = pC.bottom + (childTopY - pC.bottom) * 0.5;
+
+    // Vertical do pai até junção
+    mkLine(pC.cx, pC.bottom, pC.cx, junctionY, color);
+    mkDot(pC.cx, pC.bottom, 3, color);
+
+    if(childCoords.length > 1){
+      const minCx = Math.min(...childCoords.map(c => c.cx));
+      const maxCx = Math.max(...childCoords.map(c => c.cx));
+      mkLine(minCx, junctionY, maxCx, junctionY, color);
+    }
+
+    childCoords.forEach(cc => {
+      mkLine(cc.cx, junctionY, cc.cx, cc.top, color);
+      mkDot(cc.cx, cc.top, 3, color);
+    });
+
+    mkDot(pC.cx, junctionY, 2.5, color, '.5');
+  });
+
+  // ── LINHAS DE CASAL ──
+  const drawnCouples = new Set();
+  people.forEach(p => {
+    if(!p.spouseId) return;
+    const key = [p.id, p.spouseId].sort().join('|');
+    if(drawnCouples.has(key)) return;
+    drawnCouples.add(key);
+
+    const spouse = people.find(x=>x.id===p.spouseId);
+    if(!spouse) return;
+
+    const elA = document.querySelector(`[data-id="${p.id}"] .avatar-ring`);
+    const elB = document.querySelector(`[data-id="${spouse.id}"] .avatar-ring`);
+    if(!elA || !elB) return;
+
+    const sr = svg.getBoundingClientRect();
+    const cA = getCoords(elA, sr);
+    const cB = getCoords(elB, sr);
+    const midY  = (cA.top + cA.bottom) / 2;
+    const midX  = (cA.cx + cB.cx) / 2;
+    const leftX  = Math.min(cA.cx, cB.cx);
+    const rightX = Math.max(cA.cx, cB.cx);
+
+    mkLine(leftX, midY, rightX, midY, '#C45C2E', '3,3');
+
+    // Coração no meio
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('transform', `translate(${Math.round(midX)},${Math.round(midY)})`);
+    const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bg.setAttribute('x','-8'); bg.setAttribute('y','-8');
+    bg.setAttribute('width','16'); bg.setAttribute('height','16');
+    bg.setAttribute('fill','#0E0A04');
+    g.appendChild(bg);
+    const heart = document.createElementNS('http://www.w3.org/2000/svg','path');
+    heart.setAttribute('d','M0,3 C0,3 -6,-3 -6,-6 C-6,-9 -3,-10 0,-7 C3,-10 6,-9 6,-6 C6,-3 0,3 0,3 Z');
+    heart.setAttribute('fill','#C45C2E');
+    heart.setAttribute('opacity','0.8');
+    g.appendChild(heart);
+    svg.appendChild(g);
+  });
+}
+
+function createCard(p){
+  const card=document.createElement('div');
+  card.className='person-card';
+  card.setAttribute('data-id', p.id);
+  card.onclick=()=>openView(p.id);
+  const isP=p.gen=='1';
+  const ringCls=`avatar-ring${isP?' patriarch':''}${p.died?' deceased':''}`;
+  const dates=p.born?(p.died?`${p.born} – ${p.died}`:`${p.born} –`):(p.died?`† ${p.died}`:'');
+  const cfg=GEN_CFG[p.gen]||{color:'var(--kente-gold)'};
+  const avatarContent = p.photo
+    ? `<img src="${p.photo}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+    : (p.emoji||'👤');
+  card.innerHTML=`
+    ${p.died?'<div class="deceased-badge">†</div>':''}
+    <div class="${ringCls}"><div class="avatar-inner">${avatarContent}</div></div>
+    <div class="person-name">${p.name}</div>
+    ${dates?`<div class="person-dates">${dates}</div>`:''}
+    ${p.role?`<div class="person-gen-tag" style="color:${cfg.color}">${p.role}</div>`:''}`;
+  return card;
+}
+
+/* ── EMOJI PICKER ── */
+function buildEmojiGrid(sel){
+  const g=document.getElementById('emojiGrid'); g.innerHTML='';
+  EMOJIS.forEach(e=>{
+    const b=document.createElement('button');
+    b.type='button'; b.className='emoji-btn'+(e===sel?' selected':'');
+    b.textContent=e;
+    b.onclick=()=>{ document.querySelectorAll('.emoji-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); document.getElementById('fEmoji').value=e; };
+    g.appendChild(b);
+  });
+}
+
+/* ── FORM ── */
+function openAddForm(){ openAddFormGen(null); }
+function openAddFormGen(gen){
+  document.getElementById('formTitle').textContent='Adicionar Membro';
+  document.getElementById('fEditId').value='';
+  ['fName','fRole','fNickname','fBornDay','fBornYear','fDiedDay','fDiedYear','fPlace','fNote','fPhone'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fBornMonth').value='';
+  document.getElementById('fDiedMonth').value='';
+  document.getElementById('fEmoji').value='👤';
+  document.getElementById('fPhoto').value='';
+  document.getElementById('fPhotoFile').value='';
+  document.getElementById('fSpouse').value='';
+  // Limpa multi-select
+  Array.from(document.getElementById('fParent').options).forEach(o=>o.selected=false);
+  renderPhotoPreview('');
+  document.getElementById('fGen').value=gen||'1';
+  buildEmojiGrid('👤');
+  updateParentOptions();
+  updateSpouseOptions();
+  document.getElementById('formOverlay').classList.add('open');
+}
+function closeFormOvl(e){ if(e.target===document.getElementById('formOverlay')) document.getElementById('formOverlay').classList.remove('open'); }
+
+function updateParentOptions(selectedIds){
+  const genVal = parseInt(document.getElementById('fGen').value)||1;
+  const sel = document.getElementById('fParent');
+  // guarda selecção actual se não foi passada
+  const prevIds = selectedIds || Array.from(sel.selectedOptions).map(o=>o.value);
+  sel.innerHTML = '';
+  const parentGen = genVal - 1;
+  if(parentGen < 1){
+    const opt = document.createElement('option');
+    opt.disabled = true; opt.textContent = '— Geração I não tem ascendente —';
+    sel.appendChild(opt);
+    return;
+  }
+  const candidates = people.filter(p=>parseInt(p.gen)===parentGen);
+  if(!candidates.length){
+    const opt = document.createElement('option');
+    opt.disabled = true; opt.textContent = '— Sem membros na geração anterior —';
+    sel.appendChild(opt);
+    return;
+  }
+  candidates.forEach(p=>{
+    const opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.name + (p.role ? ` · ${p.role}` : '');
+    if(prevIds.includes(p.id)) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function updateSpouseOptions(selectedId){
+  const genVal = parseInt(document.getElementById('fGen').value)||1;
+  const editId = document.getElementById('fEditId').value;
+  const sel = document.getElementById('fSpouse');
+  const prev = selectedId || sel.value;
+  sel.innerHTML = '<option value="">— Sem cônjuge —</option>';
+  // Cônjuge pode ser da mesma geração ou adjacente
+  const candidates = people.filter(p => Math.abs(parseInt(p.gen) - genVal) <= 1 && p.id !== editId);
+  candidates.forEach(p=>{
+    const opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.name + (p.role ? ` · ${p.role}` : '') + ` (Ger. ${p.gen})`;
+    if(p.id === prev) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+async function submitPerson(){
+  const name=document.getElementById('fName').value.trim();
+  if(!name){ toast('Por favor insira o nome.'); return; }
+  const editId=document.getElementById('fEditId').value;
+  const newSpouseId = document.getElementById('fSpouse').value || '';
+
+  // Datas completas
+  const bDay=document.getElementById('fBornDay').value;
+  const bMon=document.getElementById('fBornMonth').value;
+  const bYr=document.getElementById('fBornYear').value;
+  const dDay=document.getElementById('fDiedDay').value;
+  const dMon=document.getElementById('fDiedMonth').value;
+  const dYr=document.getElementById('fDiedYear').value;
+  const born = [bDay,bMon,bYr].filter(Boolean).join('/') || '';
+  const died = [dDay,dMon,dYr].filter(Boolean).join('/') || '';
+
+  // Pais (multi-select — máx 2)
+  const parentIds = Array.from(document.getElementById('fParent').selectedOptions)
+    .map(o=>o.value).filter(Boolean).slice(0,2);
+
+  const person={
+    id:       editId||Date.now().toString(),
+    emoji:    document.getElementById('fEmoji').value||'👤',
+    name,
+    nickname: document.getElementById('fNickname').value.trim(),
+    gen:      document.getElementById('fGen').value,
+    parentIds,
+    parentId: parentIds[0] || '',   // compatibilidade com lógica de linhas
+    spouseId: newSpouseId,
+    role:     document.getElementById('fRole').value.trim(),
+    born,
+    died,
+    place:    document.getElementById('fPlace').value.trim(),
+    phone:    document.getElementById('fPhone').value.trim(),
+    photo:    document.getElementById('fPhoto').value,
+    note:     document.getElementById('fNote').value.trim(),
+  };
+  document.getElementById('formOverlay').classList.remove('open');
+  await save(person);
+  if(newSpouseId){
+    const spouse = people.find(p=>p.id===newSpouseId);
+    if(spouse && spouse.spouseId !== person.id){
+      await save({...spouse, spouseId: person.id});
+    }
+  }
+  if(editId){
+    const old = people.find(p=>p.id===editId);
+    if(old && old.spouseId && old.spouseId !== newSpouseId){
+      const oldSpouse = people.find(p=>p.id===old.spouseId);
+      if(oldSpouse) await save({...oldSpouse, spouseId:''});
+    }
+  }
+  toast(editId ? `${name} foi actualizado!` : `${name} foi adicionado à árvore!`);
+}
+
+/* ── VIEW ── */
+function openView(id){
+  const p=people.find(x=>x.id===id); if(!p) return;
+  viewingId=id;
+
+  // Avatar — photo takes priority over emoji
+  const ring = document.getElementById('vAvatarRing');
+  const inner = document.getElementById('vEmoji');
+  if(p.photo){
+    inner.innerHTML=`<img class="modal-photo-big" src="${p.photo}" alt="${p.name}">`;
+  } else {
+    inner.innerHTML='';
+    inner.textContent=p.emoji||'👤';
+  }
+
+  document.getElementById('vName').textContent = p.name + (p.nickname ? ` · "${p.nickname}"` : '');
+  document.getElementById('vRole').textContent=p.role||(GEN_CFG[p.gen]?.label||`Geração ${p.gen}`);
+
+  // Formata data legível
+  const MONTHS = ['','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  function fmtDate(d){
+    if(!d) return null;
+    const parts = d.split('/');
+    if(parts.length===3){ // dia/mes/ano
+      const [dy,mn,yr] = parts;
+      return [dy?dy+'':'', mn?MONTHS[parseInt(mn)]:'', yr].filter(Boolean).join(' ');
+    }
+    return d; // fallback para formato antigo (só ano)
+  }
+  const bStr = fmtDate(p.born);
+  const dStr = fmtDate(p.died);
+  const dates = bStr ? (dStr ? `${bStr} — ${dStr}` : `${bStr} — presente`) : (dStr ? `† ${dStr}` : '—');
+
+  const gl=GEN_CFG[p.gen]?.label||`Geração ${p.gen}`;
+  let fields=`<div class="modal-field"><span class="field-label">Geração</span><span class="field-val">${gl}</span></div>`;
+  fields+=`<div class="modal-field"><span class="field-label">Datas</span><span class="field-val">${dates}</span></div>`;
+  if(p.place) fields+=`<div class="modal-field"><span class="field-label">Natural de</span><span class="field-val">${p.place}</span></div>`;
+  if(p.phone) fields+=`<div class="modal-field"><span class="field-label">Telefone</span><span class="field-val"><a class="phone-link" href="tel:${p.phone}">${p.phone}</a></span></div>`;
+  // Cônjuge
+  if(p.spouseId){
+    const sp = people.find(x=>x.id===p.spouseId);
+    if(sp) fields+=`<div class="modal-field"><span class="field-label">Cônjuge</span><span class="field-val" style="cursor:pointer;text-decoration:underline dotted;color:var(--kente-gold)" onclick="document.getElementById('viewOverlay').classList.remove('open');setTimeout(()=>openView('${sp.id}'),120)">${sp.name}</span></div>`;
+  }
+  // Pais (suporta múltiplos)
+  const pIds = p.parentIds?.length ? p.parentIds : (p.parentId ? [p.parentId] : []);
+  if(pIds.length){
+    const parNames = pIds.map(pid=>{ const pr=people.find(x=>x.id===pid); return pr?pr.name:null; }).filter(Boolean);
+    if(parNames.length) fields+=`<div class="modal-field"><span class="field-label">Filho(a) de</span><span class="field-val">${parNames.join(' · ')}</span></div>`;
+  }
+  // Filhos
+  const children = people.filter(x=>(x.parentIds||[x.parentId]).includes(p.id));
+  const spouseChildren = p.spouseId ? people.filter(x=>(x.parentIds||[x.parentId]).includes(p.spouseId) && children.every(c=>c.id!==x.id)) : [];
+  const allChildren = [...children, ...spouseChildren];
+  if(allChildren.length){
+    fields+=`<div class="modal-field"><span class="field-label">Filhos</span><span class="field-val">${allChildren.map(c=>c.name).join(', ')}</span></div>`;
+  }
+  fields+=`<div class="modal-field"><span class="field-label">Família</span><span class="field-val">Cassoma · Angola</span></div>`;
+  document.getElementById('vFields').innerHTML=fields;
+  const ne=document.getElementById('vNote');
+  if(p.note){ne.style.display='block';ne.textContent=p.note;}else ne.style.display='none';
+  // Mostrar botões de edição só para admins
+  document.getElementById('vActions').style.display = isAdmin ? 'flex' : 'none';
+  document.getElementById('viewOverlay').classList.add('open');
+}
+function closeViewOvl(e){
+  if(e.target===document.getElementById('viewOverlay')){
+    document.getElementById('deleteConfirmBox').style.display='none';
+    document.getElementById('btnDeleteMain').style.display='';
+    document.getElementById('viewOverlay').classList.remove('open');
+  }
+}
+
+function editFromView(){
+  const p=people.find(x=>x.id===viewingId); if(!p) return;
+  document.getElementById('viewOverlay').classList.remove('open');
+  document.getElementById('formTitle').textContent='Editar Membro';
+  document.getElementById('fEditId').value=p.id;
+  document.getElementById('fName').value=p.name;
+  document.getElementById('fNickname').value=p.nickname||'';
+  document.getElementById('fGen').value=p.gen;
+  document.getElementById('fRole').value=p.role||'';
+  // Datas — suporta formato novo (dd/mm/yyyy) e antigo (só ano)
+  function parseDateField(d, dayId, monId, yrId){
+    if(!d){ ['','',''].forEach((v,i)=>document.getElementById([dayId,monId,yrId][i]).value=v); return; }
+    const parts = d.split('/');
+    if(parts.length===3){
+      document.getElementById(dayId).value=parts[0]||'';
+      document.getElementById(monId).value=parts[1]||'';
+      document.getElementById(yrId).value=parts[2]||'';
+    } else {
+      document.getElementById(dayId).value='';
+      document.getElementById(monId).value='';
+      document.getElementById(yrId).value=d;
+    }
+  }
+  parseDateField(p.born,'fBornDay','fBornMonth','fBornYear');
+  parseDateField(p.died,'fDiedDay','fDiedMonth','fDiedYear');
+  document.getElementById('fPlace').value=p.place||'';
+  document.getElementById('fPhone').value=p.phone||'';
+  document.getElementById('fNote').value=p.note||'';
+  document.getElementById('fEmoji').value=p.emoji||'👤';
+  document.getElementById('fPhoto').value=p.photo||'';
+  document.getElementById('fPhotoFile').value='';
+  renderPhotoPreview(p.photo||'');
+  buildEmojiGrid(p.emoji||'👤');
+  const parentIds = p.parentIds?.length ? p.parentIds : (p.parentId ? [p.parentId] : []);
+  updateParentOptions(parentIds);
+  updateSpouseOptions(p.spouseId||'');
+  document.getElementById('formOverlay').classList.add('open');
+}
+
+function showDeleteConfirm(){
+  const p=people.find(x=>x.id===viewingId); if(!p) return;
+  document.getElementById('deleteConfirmName').textContent=p.name;
+  document.getElementById('deleteConfirmBox').style.display='block';
+  document.getElementById('btnDeleteMain').style.display='none';
+}
+
+function cancelDelete(){
+  document.getElementById('deleteConfirmBox').style.display='none';
+  document.getElementById('btnDeleteMain').style.display='';
+}
+
+async function confirmDelete(){
+  const p=people.find(x=>x.id===viewingId); if(!p) return;
+  document.getElementById('viewOverlay').classList.remove('open');
+  document.getElementById('deleteConfirmBox').style.display='none';
+  document.getElementById('btnDeleteMain').style.display='';
+  await remove(viewingId);
+  toast(`${p.name} foi removido da árvore.`);
+}
+
+/* ── TOAST ── */
+function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3200); }
+
+// Expõe funções ao HTML (necessário com type="module")
+window.openAddForm = openAddForm;
+window.openAddFormGen = openAddFormGen;
+window.closeFormOvl = closeFormOvl;
+window.submitPerson = submitPerson;
+window.updateParentOptions = updateParentOptions;
+window.updateSpouseOptions = updateSpouseOptions;
+window.openView = openView;
+
+// Redesenha linhas ao redimensionar janela
+window.addEventListener('resize', ()=>{
+  const svg = document.getElementById('lineageSvg');
+  if(svg) drawLines(svg);
+});
+window.closeViewOvl = closeViewOvl;
+window.editFromView = editFromView;
+window.showDeleteConfirm = showDeleteConfirm;
+window.cancelDelete = cancelDelete;
+window.confirmDelete = confirmDelete;
+window.handlePhotoUpload = handlePhotoUpload;
+window.clearPhoto = clearPhoto;
+window.openPwdModal = openPwdModal;
+window.closePwdOvl = closePwdOvl;
+window.checkPassword = checkPassword;
+window.logoutAdmin = logoutAdmin;
+window.exportPNG = exportPNG;
+</script>
+</body>
+</html>
   --kente-green:   #1A6B3C;
   --kente-blue:    #1B4F8A;
   --chitenge-plum: #6B2D6B;
